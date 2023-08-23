@@ -3,6 +3,7 @@ package com.multBancapp.apimultbanc.services;
 
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
+import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,11 @@ public class AccountService {
             } else {
                   throw new BusinessRulesException("Conta não encontrada ou documento informado invalido");
             }
+      }
+
+      @Transactional(readOnly = true)
+      public AccountDTO findAccount(Integer number){
+            var resultAccount = accountRepository.findByNumberAccount(number);
+            return new AccountDTO(resultAccount.getNumber(), resultAccount.getAgency(), resultAccount.getHolder(), resultAccount.getTypeAccount(), resultAccount.getBalance(), resultAccount.getPerformace(), resultAccount.getRate());
       }
 }

@@ -9,4 +9,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
       @Query(value = "SELECT a FROM AccountEntity a WHERE a.holder = :holder")
       AccountEntity findByAccount(UserEntity holder);
+
+      @Query(value = "Select a from AccountEntity a Where a.number = :number")
+      AccountEntity findByNumberAccount(Integer number);
 }

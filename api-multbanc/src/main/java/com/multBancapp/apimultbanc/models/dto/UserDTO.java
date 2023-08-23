@@ -1,4 +1,4 @@
-package com.multBancapp.apimultbanc.models;
+package com.multBancapp.apimultbanc.models.dto;
 
 import com.multBancapp.apimultbanc.entities.enums.TypePerson;
 
