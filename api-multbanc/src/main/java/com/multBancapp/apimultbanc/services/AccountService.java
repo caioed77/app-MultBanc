@@ -29,9 +29,8 @@ public class AccountService {
       }
 
       @Transactional
-      public AccountEntity createConta(AccountEntity account, String document, String tipoConta) {
-            var userKey = userService.findByDocument(document);
-            var people = userService.findById(userKey.getId()).get();
+      public AccountEntity createAccount(AccountEntity account, String document, String tipoConta) {
+            var people = userService.findByDocument(document);
             var typeAccount =  typeAccountService.findByTypeAccount(tipoConta).get();
             var poupanca = new AccountEntity(account.getId(), account.getNumber(), account.getAgency(), people, typeAccount, account.getBalance(), account.getPerformace(), account.getRate());
             return accountRepository.save(poupanca);
