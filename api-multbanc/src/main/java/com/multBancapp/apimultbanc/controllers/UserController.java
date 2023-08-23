@@ -1,0 +1,36 @@
+package com.multBancapp.apimultbanc.controllers;
+
+import com.multBancapp.apimultbanc.entities.UserEntity;
+import com.multBancapp.apimultbanc.models.UserDTO;
+import com.multBancapp.apimultbanc.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(value = "/usuarios")
+public class UserController {
+
+      private final UserService userService;
+
+      @Autowired
+      public UserController(UserService userService) {
+            this.userService = userService;
+      }
+
+      @GetMapping(value = "/documento")
+      public ResponseEntity<UserDTO> findDocument(@RequestParam Optional<String> documento) {
+            return documento.map(s -> ResponseEntity.ok(userService.findUser(s)))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+      }
+
+      @PostMapping(value = "/registrar")
+      @ResponseStatus(HttpStatus.CREATED)
+      public ResponseEntity<UserEntity> createUser(@RequestBody  UserEntity user) {
+            return ResponseEntity.ok().body(userService.createUser(user));
+      }
+}
