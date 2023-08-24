@@ -6,6 +6,7 @@ import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.models.dto.UserDTO;
 import com.multBancapp.apimultbanc.repositories.UserRepository;
 import com.multBancapp.apimultbanc.services.utils.ValidateCPF;
+import com.multBancapp.apimultbanc.services.utils.ValidateEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,9 +42,6 @@ public class UserService {
             var validadeCPF = new ValidateCPF();
 
             if (validadeCPF.validade(user)) {
-                  var encryptedPassword = passwordEncoder.passwordEncoder().encode(user.getPassword());
-                  user.setPassword(encryptedPassword);
-
                   return userRepository.save(user);
             } else {
                   throw new BusinessRulesException("CPF Invalido");
@@ -60,6 +58,36 @@ public class UserService {
                     resultDocument.getTypePerson()
             );
       }
+
+      public boolean isValid(String email, String senha) {
+            var userResult = userRepository.findByEmail(email);
+            if (userResult.isEmpty())
+                  return false;
+
+            var comparePassword = passwordEncoder.passwordEncoder().matches(senha, userResult.get().getPassword());
+
+            if (comparePassword && !userResult.get().getBlocked().equals("T"))
+                  return true;
+
+            throw  new BusinessRulesException("Usuário não encontrado");
+      }
+
+      @Transactional
+      public void  registerLogin(UserDTO userDTO) {
+            var validateEmail = new ValidateEmail();
+
+            if (validateEmail.validate(userDTO.email())) {
+                  var newUser = new UserEntity();
+                  var encryptedPassword = passwordEncoder.passwordEncoder().encode(userDTO.password());
+                  newUser.setEmail(userDTO.email());
+                  newUser.setPassword(encryptedPassword);
+                  userRepository.save(newUser);
+            } else {
+                  throw new BusinessRulesException("Email invalido");
+            }
+
+      }
+
 
 
 }
