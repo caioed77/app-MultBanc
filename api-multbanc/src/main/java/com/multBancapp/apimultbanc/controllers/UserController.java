@@ -29,29 +29,12 @@ public class UserController {
             this.userService = userService;
       }
 
-
-      @Operation(
-              summary = "Lista usuarios por documento(cpf)",
-              description = "Devolve o usuario pelo documento informado",
-              tags = { "documento", "get" })
-      @ApiResponses({
-              @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = UserEntity.class), mediaType = "application/json") }),
-              @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-              @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
       @GetMapping(value = "/documento")
       public ResponseEntity<UserDTO> findDocument(@RequestParam Optional<String> documento) {
             return documento.map(s -> ResponseEntity.ok(userService.findUser(s)))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
       }
 
-      @Operation(
-              summary = "Cria usuario",
-              description = "Cadastrar o usuario",
-              tags = { "registrar", "post" })
-      @ApiResponses({
-              @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = UserEntity.class), mediaType = "application/json") }),
-              @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-              @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
       @PostMapping(value = "/registrar")
       @ResponseStatus(HttpStatus.CREATED)
       public ResponseEntity<UserEntity> createUser(@RequestBody  UserEntity user) {
