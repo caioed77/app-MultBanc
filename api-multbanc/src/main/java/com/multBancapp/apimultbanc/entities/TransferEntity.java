@@ -1,12 +1,14 @@
 package com.multBancapp.apimultbanc.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
-@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -19,14 +21,18 @@ public class TransferEntity {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
 
-      private String receiver;
+      @ManyToOne
+      private AccountEntity sourceAccount;
 
-      private String sender;
+      @ManyToOne
+      private AccountEntity destinationAccount;
 
       private BigDecimal amount;
 
-      private LocalDate dataTransfer;
+      private Timestamp dataTransfer;
 
       @ManyToOne
-      private UserEntity user;
+      private UserEntity userSender;
+
+      private String status;
 }
