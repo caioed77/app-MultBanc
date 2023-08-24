@@ -2,14 +2,11 @@ package com.multBancapp.apimultbanc.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,6 +34,15 @@ public class AccountEntity {
 
       private Double rate;
 
+      public AccountEntity(Integer number, Integer agency, UserEntity holder, TypeAccountEntity typeAccountEntity, BigDecimal balance, BigDecimal performace, Double rate) {
+            this.number = number;
+            this.agency = agency;
+            this.holder = holder;
+            this.typeAccount = typeAccountEntity;
+            this.balance = balance;
+            this.performace = performace;
+            this.rate = rate;
+      }
 
       public void deposit(BigDecimal value) {
             balance = balance.add(value);

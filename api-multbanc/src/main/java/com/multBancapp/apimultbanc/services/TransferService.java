@@ -2,7 +2,9 @@ package com.multBancapp.apimultbanc.services;
 
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.entities.TransferEntity;
+import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
+import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,53 +24,39 @@ public class TransferService {
 
     private final UserService userService;
 
-    private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public TransferService(TransferRepository transferRepository, UserService userService, AccountService accountService) {
+    public TransferService(TransferRepository transferRepository, UserService userService, AccountRepository accountRepository) {
         this.transferRepository = transferRepository;
         this.userService = userService;
-        this.accountService = accountService;
+        this.accountRepository = accountRepository;
     }
 
     @Transactional
     public void generatedTransfer(Integer numberSourceAccount, Integer numberDestinationAccount, BigDecimal amount) {
-        var sourceAccountDTO = accountService.findAccount(numberSourceAccount);
-        var sourceAccountEntity = convertDTOToEntity(sourceAccountDTO, AccountEntity.class);
-        var destinationAccountDTO = accountService.findAccount(numberDestinationAccount);
-        var destinationAccountEntity = convertDTOToEntity(destinationAccountDTO, AccountEntity.class);
+        var sourceAccount = accountRepository.findByNumberAccount(numberSourceAccount);
+        var destinationAccount = accountRepository.findByNumberAccount(numberDestinationAccount);
 
-        var userReceiver = userService.findById(sourceAccountEntity.getHolder().getId());
+        var userReceiver = userService.findById(sourceAccount.getHolder().getId());
         var dateAt = Timestamp.valueOf(LocalDateTime.now());
 
-        var newTransfer = new TransferEntity();
-        newTransfer.setSourceAccount(sourceAccountEntity);
-        newTransfer.setDestinationAccount(destinationAccountEntity);
-        newTransfer.setDataTransfer(dateAt);
-        newTransfer.setUserSender(userReceiver.get());
-        newTransfer.setAmount(amount);
-        newTransfer.setStatus("Concluido");
+        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+            throw new BusinessRulesException("Saldo insuficiente para realizar a transferência");
+        } else {
+            var newTransfer = new TransferEntity();
+            newTransfer.setSourceAccount(sourceAccount);
+            newTransfer.setDestinationAccount(destinationAccount);
+            newTransfer.setDataTransfer(dateAt);
+            newTransfer.setUserSender(userReceiver.get());
+            newTransfer.setAmount(amount);
+            newTransfer.setStatus("Concluido");
+            transferRepository.save(newTransfer);
 
-        transferRepository.save(newTransfer);
-    }
-
-    public <T> T convertDTOToEntity(Object dto, Class<T> entityType) {
-        try {
-            T entity = entityType.getDeclaredConstructor().newInstance();
-            for (Method dtoMethod : dto.getClass().getMethods()) {
-                if (dtoMethod.getName().startsWith("get")) {
-                    String fieldName = dtoMethod.getName().substring(3);
-                    Method entitySetter = entityType.getMethod("set" + fieldName, dtoMethod.getReturnType());
-                    entitySetter.invoke(entity, dtoMethod.invoke(dto));
-                }
-            }
-            return entity;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException
-                 | NoSuchMethodException e) {
-            e.printStackTrace();
-            return null;
+            sourceAccount.toWithdraw(amount);
+            destinationAccount.deposit(amount);
         }
-    }
 
+    }
 
 }
