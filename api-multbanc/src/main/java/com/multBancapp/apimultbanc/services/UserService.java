@@ -55,7 +55,8 @@ public class UserService {
                     resultDocument.getEmail(),
                     resultDocument.getPassword(),
                     resultDocument.getDocument(),
-                    resultDocument.getTypePerson()
+                    resultDocument.getTypePerson(),
+                    resultDocument.getImgUser()
             );
       }
 

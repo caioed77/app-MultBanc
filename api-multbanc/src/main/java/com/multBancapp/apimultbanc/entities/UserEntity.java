@@ -36,4 +36,6 @@ public class UserEntity {
 
       private TypePermission typePermission = TypePermission.GUEST;
 
+      private String imgUser;
+
 }
