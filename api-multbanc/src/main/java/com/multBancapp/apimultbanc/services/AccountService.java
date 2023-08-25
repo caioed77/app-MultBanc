@@ -31,17 +31,17 @@ public class AccountService {
 
       @Transactional
       public AccountEntity createAccount(AccountEntity account, String document, String tipoConta) {
-            var people = userService.findByDocument(document);
+            var userAccount = userService.findByDocument(document);
             var typeAccount =  typeAccountService.findByTypeAccount(tipoConta).get();
-            var poupanca = new AccountEntity(account.getId(), account.getNumber(), account.getAgency(), people, typeAccount, account.getBalance(), account.getPerformace(), account.getRate());
-            return accountRepository.save(poupanca);
+            var newAccount = new AccountEntity(account.getId(), account.getNumber(), account.getAgency(), userAccount, typeAccount, account.getBalance(), account.getPerformace(), account.getRate());
+            return accountRepository.save(newAccount);
       }
 
 
       @Transactional
       public void depositAccount(BigDecimal amount, String document) {
-            var peopleKey = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(peopleKey));
+            var userCode = userService.findByDocument(document);
+            var account = Optional.ofNullable(accountRepository.findByAccount(userCode));
 
             if (account.isPresent()) {
 
@@ -59,8 +59,8 @@ public class AccountService {
 
       @Transactional
       public void withdrawAccount(BigDecimal amount, String document, Double rate) {
-            var people = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(people));
+            var userAccount = userService.findByDocument(document);
+            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount));
 
             if (account.isPresent()) {
 

@@ -29,7 +29,6 @@ public class LoginController {
             return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
       }
 
-
       @PostMapping(value = "/novoUsuario")
       @ResponseStatus(HttpStatus.CREATED)
       public ResponseEntity registerLogin(@RequestBody UserDTO userDTO) {

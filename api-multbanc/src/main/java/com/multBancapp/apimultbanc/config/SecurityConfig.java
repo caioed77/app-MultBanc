@@ -15,11 +15,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/auth/**")
-                .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().permitAll()
-                )
-                .httpBasic(Customizer.withDefaults());
+              .securityMatcher("/auth/**")
+              .authorizeHttpRequests((authz) -> authz
+                     .anyRequest().permitAll()
+             )
+             .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
