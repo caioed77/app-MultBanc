@@ -3,12 +3,14 @@ package com.multBancapp.apimultbanc.services;
 import com.multBancapp.apimultbanc.config.SecurityConfig;
 import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
+import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
+import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
 import com.multBancapp.apimultbanc.models.dto.UserDTO;
 import com.multBancapp.apimultbanc.repositories.UserRepository;
 import com.multBancapp.apimultbanc.services.utils.ValidateCPF;
 import com.multBancapp.apimultbanc.services.utils.ValidateEmail;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +91,18 @@ public class UserService {
 
       }
 
+      @Transactional
+      public void changeUser(Long id, UpdateUserDTO obj){
+            try {
+                  UserEntity dadosAtt = userRepository.getReferenceById(id);
+                  dadosAtt.setDocument(obj.setDocument());
+                  dadosAtt.setTypePerson(obj.typePerson());
+                  dadosAtt.setImgUser(obj.imgUser());
+                  userRepository.save(dadosAtt);
+            } catch (EntityNotFoundException e) {
 
+                  throw new ResouceNotFoundException(id);
+            }
+      }
 
 }

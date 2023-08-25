@@ -1,13 +1,9 @@
 package com.multBancapp.apimultbanc.controllers;
 
 import com.multBancapp.apimultbanc.entities.UserEntity;
+import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
 import com.multBancapp.apimultbanc.models.dto.UserDTO;
 import com.multBancapp.apimultbanc.services.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,5 +35,14 @@ public class UserController {
       @ResponseStatus(HttpStatus.CREATED)
       public ResponseEntity<UserEntity> createUser(@RequestBody  UserEntity user) {
             return ResponseEntity.ok().body(userService.createUser(user));
+      }
+
+      @PutMapping(value = "/atualizar/{id}")
+      @ResponseStatus(HttpStatus.ACCEPTED)
+      public ResponseEntity updateUser(
+              @PathVariable Long id,
+              @RequestBody UpdateUserDTO updatedUser) {
+            userService.changeUser(id, updatedUser);
+            return ResponseEntity.ok().build();
       }
 }
