@@ -59,12 +59,9 @@ public class AccountService {
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
 
-                        if (account.getTypeAccount().getId().equals("C")) {
-                              account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
-                        }
-
-                        if (account.getTypeAccount().getId().equals("P")) {
-                              account.toWithdraw(amount);
+                        switch (account.getTypeAccount().getId()) {
+                              case "C"  -> account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
+                              case "P"  ->  account.toWithdraw(amount);
                         }
 
                         accountRepository.saveAndFlush(account);
