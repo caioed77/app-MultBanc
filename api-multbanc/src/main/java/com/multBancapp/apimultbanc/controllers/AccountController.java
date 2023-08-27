@@ -38,7 +38,7 @@ public class AccountController {
 
     @PostMapping(value = "/saque")
     public ResponseEntity withdrawAccount(@RequestParam BigDecimal amount, @RequestParam String documento) {
-        accountService.withdrawAccount(amount, documento, 7.0);
+        accountService.withdrawAccount(amount, documento, 5.0);
         return ResponseEntity.ok().build();
     }
 
