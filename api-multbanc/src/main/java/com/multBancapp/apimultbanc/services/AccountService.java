@@ -41,47 +41,36 @@ public class AccountService {
       @Transactional
       public void depositAccount(BigDecimal amount, String document) {
             var userCode = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userCode));
-
-            if (account.isPresent()) {
+            var account = Optional.ofNullable(accountRepository.findByAccount(userCode))
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado invalido"));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
-                        account.get().deposit(amount);
+                        account.deposit(amount);
                   } else {
                         throw new BusinessRulesException("O Valor informado não pode ser zero");
                   }
-
-            } else {
-                  throw new BusinessRulesException("Conta não encontrada ou documento informado invalido");
-            }
-
       }
 
       @Transactional
       public void withdrawAccount(BigDecimal amount, String document, Double rate) {
             var userAccount = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount));
-
-            if (account.isPresent()) {
+            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount))
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado invalido"));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
 
-                        if (account.get().getTypeAccount().getId().equals("C")) {
-                              account.get().toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
+                        if (account.getTypeAccount().getId().equals("C")) {
+                              account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
                         }
 
-                        if (account.get().getTypeAccount().getId().equals("P")) {
-                              account.get().toWithdraw(amount);
+                        if (account.getTypeAccount().getId().equals("P")) {
+                              account.toWithdraw(amount);
                         }
 
                         accountRepository.saveAndFlush(account.get());
                   } else {
                         throw new BusinessRulesException("O Valor informado não pode ser zero");
                   }
-
-            } else {
-                  throw new BusinessRulesException("Conta não encontrada ou documento informado invalido");
-            }
       }
 
       @Transactional(readOnly = true)
