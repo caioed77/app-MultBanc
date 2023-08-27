@@ -67,7 +67,7 @@ public class AccountService {
                               account.toWithdraw(amount);
                         }
 
-                        accountRepository.saveAndFlush(account.get());
+                        accountRepository.saveAndFlush(account);
                   } else {
                         throw new BusinessRulesException("O Valor informado não pode ser zero");
                   }
