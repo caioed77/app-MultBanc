@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface TransferRepository extends JpaRepository<TransferEntity, Long> {
 
       @Query(value = "Select t from TransferEntity t where t.userSender = :user")
-      TransferEntity findUserTransfer(UserEntity user);
+      TransferEntity findUserTransfer(Long user);
 
 }

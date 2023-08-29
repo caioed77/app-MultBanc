@@ -57,7 +57,7 @@ public class TransferService {
 
     @Transactional(readOnly = true)
     public TransferEntity findTransfUser(UserEntity user) {
-        return  transferRepository.findUserTransfer(user);
+        return  transferRepository.findUserTransfer(user.getId());
     }
 
 
