@@ -1,6 +1,7 @@
 package com.multBancapp.apimultbanc.services;
 
 import com.multBancapp.apimultbanc.entities.TransferEntity;
+import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.TransferRepository;
@@ -54,5 +55,25 @@ public class TransferService {
         }
 
     }
+
+    @Transactional(readOnly = true)
+    public TransferEntity findTransfUser(UserEntity user) {
+        return  transferRepository.findUserTransfer(user);
+    }
+
+
+    @Transactional
+    public void deleteTransfer(Long id) {
+
+        var transferEntity = transferRepository.findById(id)
+                .orElseThrow(() ->new BusinessRulesException("Transferência não foi encontrada."));
+
+        if (transferEntity.getStatus().equalsIgnoreCase("Concluido")) {
+            transferRepository.delete(transferEntity);
+        } else {
+            throw new BusinessRulesException("Esta conta possui transações pendentes. Por favor, verifique.");
+        }
+    }
+
 
 }

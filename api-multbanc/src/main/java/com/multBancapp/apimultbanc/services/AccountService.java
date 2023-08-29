@@ -2,6 +2,7 @@ package com.multBancapp.apimultbanc.services;
 
 
 import com.multBancapp.apimultbanc.entities.AccountEntity;
+import com.multBancapp.apimultbanc.entities.TransferEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
@@ -21,12 +22,15 @@ public class AccountService {
 
       private final TypeAccountService typeAccountService;
 
+      private final TransferService transferService;
+
 
       @Autowired
-      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService){
+      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService, TransferService transferService){
             this.userService = userService;
             this.accountRepository = accountRepository;
             this.typeAccountService = typeAccountService;
+            this.transferService = transferService;
       }
 
       @Transactional
@@ -42,12 +46,12 @@ public class AccountService {
       public void depositAccount(BigDecimal amount, String document) {
             var userCode = userService.findByDocument(document);
             var account = Optional.ofNullable(accountRepository.findByAccount(userCode))
-                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado invalido"));
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
                         account.deposit(amount);
                   } else {
-                        throw new BusinessRulesException("O Valor informado não pode ser zero");
+                        throw new BusinessRulesException("O valor informado não pode ser zero.");
                   }
       }
 
@@ -55,18 +59,18 @@ public class AccountService {
       public void withdrawAccount(BigDecimal amount, String document, Double rate) {
             var userAccount = userService.findByDocument(document);
             var account = Optional.ofNullable(accountRepository.findByAccount(userAccount))
-                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado invalido"));
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
 
                         switch (account.getTypeAccount().getId()) {
                               case "C"  -> account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
-                              case "P"  ->  account.toWithdraw(amount);
+                              case "P"  -> account.toWithdraw(amount);
                         }
 
                         accountRepository.saveAndFlush(account);
                   } else {
-                        throw new BusinessRulesException("O Valor informado não pode ser zero");
+                        throw new BusinessRulesException("O valor informado não pode ser zero.");
                   }
       }
 
@@ -74,5 +78,19 @@ public class AccountService {
       public AccountDTO findAccount(Integer number){
             var resultAccount = accountRepository.findByNumberAccount(number);
             return new AccountDTO(resultAccount.getNumber(), resultAccount.getAgency(), resultAccount.getHolder(), resultAccount.getTypeAccount(), resultAccount.getBalance(), resultAccount.getPerformace(), resultAccount.getRate());
+      }
+
+
+      @Transactional
+      public void deleteAccount(Long id) {
+
+            var accountEntity = accountRepository.findById(id)
+                    .orElseThrow(() -> new BusinessRulesException("Nenhuma conta foi encontrada para esse código."));
+
+            var transferEntity = Optional.of(transferService.findTransfUser(accountEntity.getHolder()))
+                    .orElseThrow(() -> new BusinessRulesException("Transferência não encontrada."));
+
+            transferService.deleteTransfer(transferEntity.getId());
+            accountRepository.delete(accountEntity);
       }
 }

@@ -1,7 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+'use client'
 import NavBar from "@/components/NavBar";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  
+  const router = useRouter()
+
+  const handleEntrarClick = () => {
+    router.push('/login');
+  };
+
   return (
     <>
       <NavBar />
@@ -31,13 +40,22 @@ export default function Home() {
                 placeholder="Senha"
                 className="border rounded text-lg font-bold text-black py-3 px-3 mt-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              <button className="bg-green-600 mt-5 text-white px-2 py-3 rounded hover:bg-green-500">
-                Entrar
-              </button>
+              <a               
+                className="group bg-green-600 rounded-lg border border-white px-3 py-2 hover:bg-green-700"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <h2 className={`mb-2 text-2xl font-semibold`} onClick={handleEntrarClick}>
+                  Entrar{' '}                
+                  <span className="inline-block transition-transform group-hover:bg-green-700 motion-reduce:transform-none">
+                    -&gt;
+                  </span>
+                </h2>                
+              </a>
               <div className="inline-flex gap-3 justify-center">
-                <button className="mt-5 w-36 text-white px-2 py-3 hover:bg-slate-300">
+                <button className="mt-5 w-36 text-white px-2 py-2">
                   Cadastrar-me
-                </button>                                          
+                </button>
               </div>
             </div>
           </div>
