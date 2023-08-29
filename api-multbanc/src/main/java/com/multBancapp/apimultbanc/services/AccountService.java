@@ -3,7 +3,10 @@ package com.multBancapp.apimultbanc.services;
 
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.entities.TransferEntity;
+import com.multBancapp.apimultbanc.entities.UserEntity;
+import com.multBancapp.apimultbanc.entities.enums.TypePerson;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
+import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,6 @@ public class AccountService {
 
       private final TransferService transferService;
 
-
-      @Autowired
       public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService, TransferService transferService){
             this.userService = userService;
             this.accountRepository = accountRepository;
@@ -34,13 +35,25 @@ public class AccountService {
       }
 
       @Transactional
-      public AccountEntity createAccount(AccountEntity account, String document, String tipoConta) {
-            var userAccount = userService.findByDocument(document);
-            var typeAccount =  typeAccountService.findByTypeAccount(tipoConta).get();
-            var newAccount = new AccountEntity(account.getId(), account.getNumber(), account.getAgency(), userAccount, typeAccount, account.getBalance(), account.getPerformace(), account.getRate());
-            return accountRepository.save(newAccount);
-      }
+      public AccountEntity createAccount(AccountDTO account) {
+            var userAccount = userService.findById(account.holder())
+                    .orElseThrow(() -> new ResouceNotFoundException(account.holder()));
 
+            var typeAcc =  typeAccountService.findByTypeAccount(account.typeAccount())
+                    .orElseThrow(() -> new ResouceNotFoundException(account.typeAccount()));
+
+            var resultEntity = AccountEntity.builder()
+                    .number(account.number())
+                    .agency(account.agency())
+                    .holder(userAccount)
+                    .typeAccount(typeAcc)
+                    .balance(account.balance())
+                    .performace(account.performace())
+                    .rate(account.rate())
+                    .build();
+
+                  return resultEntity;
+      }
 
       @Transactional
       public void depositAccount(BigDecimal amount, String document) {
@@ -77,7 +90,7 @@ public class AccountService {
       @Transactional(readOnly = true)
       public AccountDTO findAccount(Integer number){
             var resultAccount = accountRepository.findByNumberAccount(number);
-            return new AccountDTO(resultAccount.getNumber(), resultAccount.getAgency(), resultAccount.getHolder(), resultAccount.getTypeAccount(), resultAccount.getBalance(), resultAccount.getPerformace(), resultAccount.getRate());
+            return new AccountDTO(resultAccount.getNumber(), resultAccount.getAgency(), resultAccount.getHolder().getId(), resultAccount.getTypeAccount().getId(), resultAccount.getBalance(), resultAccount.getPerformace(), resultAccount.getRate());
       }
 
 
@@ -93,4 +106,6 @@ public class AccountService {
             transferService.deleteTransfer(transferEntity.getId());
             accountRepository.delete(accountEntity);
       }
+
+
 }

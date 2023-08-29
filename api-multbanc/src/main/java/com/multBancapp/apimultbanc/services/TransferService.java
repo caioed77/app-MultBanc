@@ -23,7 +23,6 @@ public class TransferService {
 
     private final AccountRepository accountRepository;
 
-    @Autowired
     public TransferService(TransferRepository transferRepository, UserService userService, AccountRepository accountRepository) {
         this.transferRepository = transferRepository;
         this.userService = userService;

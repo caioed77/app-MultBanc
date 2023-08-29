@@ -5,6 +5,6 @@ import com.multBancapp.apimultbanc.entities.UserEntity;
 
 import java.math.BigDecimal;
 
-public record AccountDTO(Integer number, Integer agency, UserEntity holder, TypeAccountEntity typeAccount, BigDecimal balance, BigDecimal performace, Double rate) {
+public record AccountDTO(Integer number, Integer agency, Long holder, String typeAccount, BigDecimal balance, BigDecimal performace, Double rate) {
 
 }
