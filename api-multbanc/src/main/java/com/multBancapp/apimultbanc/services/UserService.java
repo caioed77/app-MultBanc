@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 public class UserService {
@@ -39,17 +40,6 @@ public class UserService {
             return result.orElseThrow(() -> new BusinessRulesException("Documento invalido"));
       }
 
-      @Transactional
-      public UserEntity createUser(UserEntity user) {
-            var validadeCPF = new ValidateCPF();
-
-            if (validadeCPF.validade(user)) {
-                  return userRepository.save(user);
-            } else {
-                  throw new BusinessRulesException("CPF Invalido");
-            }
-      }
-
       @Transactional(readOnly = true)
       public UserDTO findUser(String document) {
             var resultDocument = Optional.ofNullable(userRepository.findDocument(document))
@@ -70,15 +60,15 @@ public class UserService {
 
       public boolean isValid(String email, String senha) {
             var userResult = userRepository.findByEmail(email);
-            if (userResult.isEmpty())
-                  return false;
+                    if (userResult.isPresent()) {
+                          var comparePassword = passwordEncoder.passwordEncoder().matches(senha, userResult.get().getPassword());
 
-            var comparePassword = passwordEncoder.passwordEncoder().matches(senha, userResult.get().getPassword());
+                          if (comparePassword && !userResult.get().getBlocked().equals("T"))
+                                return true;
 
-            if (comparePassword && !userResult.get().getBlocked().equals("T"))
-                  return true;
-
-            throw  new BusinessRulesException("Usuário não encontrado");
+                    } else {
+                          throw  new BusinessRulesException("Usuário não encontrado");;
+                    }
       }
 
       @Transactional
@@ -100,13 +90,18 @@ public class UserService {
       @Transactional
       public void changeUser(Long id, UpdateUserDTO obj){
             try {
+                  var validadeCPF = new ValidateCPF();
                   UserEntity dadosAtt = userRepository.getReferenceById(id);
-                  dadosAtt.setDocument(obj.setDocument());
-                  dadosAtt.setTypePerson(obj.typePerson());
-                  dadosAtt.setImgUser(obj.imgUser());
-                  userRepository.save(dadosAtt);
-            } catch (EntityNotFoundException e) {
 
+                  if (validadeCPF.validade(obj)) {
+                        dadosAtt.setDocument(obj.document());
+                        dadosAtt.setTypePerson(obj.typePerson());
+                        dadosAtt.setImgUser(obj.imgUser());
+                        userRepository.save(dadosAtt);
+                  } else {
+                        throw new BusinessRulesException("CPF Invalido");
+                  }
+            } catch (EntityNotFoundException e) {
                   throw new ResouceNotFoundException(id);
             }
       }

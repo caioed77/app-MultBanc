@@ -31,12 +31,6 @@ public class UserController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
       }
 
-      @PostMapping(value = "/registrar")
-      @ResponseStatus(HttpStatus.CREATED)
-      public ResponseEntity<UserEntity> createUser(@RequestBody  UserEntity user) {
-            return ResponseEntity.ok().body(userService.createUser(user));
-      }
-
       @PutMapping(value = "/atualizar/{id}")
       @ResponseStatus(HttpStatus.ACCEPTED)
       public ResponseEntity updateUser(

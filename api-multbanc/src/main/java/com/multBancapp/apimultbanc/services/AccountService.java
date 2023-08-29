@@ -2,14 +2,10 @@ package com.multBancapp.apimultbanc.services;
 
 
 import com.multBancapp.apimultbanc.entities.AccountEntity;
-import com.multBancapp.apimultbanc.entities.TransferEntity;
-import com.multBancapp.apimultbanc.entities.UserEntity;
-import com.multBancapp.apimultbanc.entities.enums.TypePerson;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +48,8 @@ public class AccountService {
                     .rate(account.rate())
                     .build();
 
-                  return resultEntity;
+            accountRepository.save(resultEntity);
+                  return  resultEntity;
       }
 
       @Transactional
