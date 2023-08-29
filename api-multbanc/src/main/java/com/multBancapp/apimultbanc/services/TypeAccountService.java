@@ -15,7 +15,6 @@ public class TypeAccountService {
 
       private final TypeAccountRepository typeAccountRepository;
 
-      @Autowired
       public TypeAccountService(TypeAccountRepository typeAccountRepository) {
             this.typeAccountRepository = typeAccountRepository;
       }
@@ -24,6 +23,8 @@ public class TypeAccountService {
       public Optional<TypeAccountEntity> findByTypeAccount(String id) {
             return typeAccountRepository.findById(id);
       }
+
+
 
 
 }

@@ -2,6 +2,7 @@ package com.multBancapp.apimultbanc.services;
 
 import com.multBancapp.apimultbanc.config.SecurityConfig;
 import com.multBancapp.apimultbanc.entities.UserEntity;
+import com.multBancapp.apimultbanc.entities.enums.TypePerson;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
 import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
@@ -24,7 +25,6 @@ public class UserService {
       @Autowired
       private SecurityConfig passwordEncoder;
 
-      @Autowired
       public UserService(UserRepository userRepository){
             this.userRepository = userRepository;
       }
@@ -52,13 +52,19 @@ public class UserService {
 
       @Transactional(readOnly = true)
       public UserDTO findUser(String document) {
-            var resultDocument = userRepository.findDocument(document);
+            var resultDocument = Optional.ofNullable(userRepository.findDocument(document))
+                    .orElseThrow(() -> new BusinessRulesException("Documento não encontrado."));
+
+            TypePerson personType = TypePerson.FISICA;
+            String personTypeString = personType.name();
+
             return new UserDTO(
                     resultDocument.getEmail(),
                     resultDocument.getPassword(),
                     resultDocument.getDocument(),
-                    resultDocument.getTypePerson(),
-                    resultDocument.getImgUser()
+                    personTypeString,
+                    resultDocument.getImgUser(),
+                    resultDocument.getId()
             );
       }
 
