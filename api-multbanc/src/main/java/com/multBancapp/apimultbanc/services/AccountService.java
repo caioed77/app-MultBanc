@@ -58,7 +58,7 @@ public class AccountService {
       @Transactional
       public void depositAccount(BigDecimal amount, String document) {
             var userCode = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userCode))
+            var account = Optional.ofNullable(accountRepository.findByAccount(userCode.getId()))
                     .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
@@ -71,41 +71,43 @@ public class AccountService {
       @Transactional
       public void withdrawAccount(BigDecimal amount, String document, Double rate) {
             var userAccount = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount))
+            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount.getId()))
                     .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
-
                         switch (account.getTypeAccount().getId()) {
                               case "C"  -> account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
                               case "P"  -> account.toWithdraw(amount);
                         }
-
                         accountRepository.saveAndFlush(account);
                   } else {
                         throw new BusinessRulesException("O valor informado não pode ser zero.");
-                  }
+                 }
       }
 
       @Transactional(readOnly = true)
       public AccountDTO findAccount(Integer number){
             var resultAccount = accountRepository.findByNumberAccount(number);
-            return new AccountDTO(resultAccount.getNumber(), resultAccount.getAgency(), resultAccount.getHolder().getId(), resultAccount.getTypeAccount().getId(), resultAccount.getBalance(), resultAccount.getPerformace(), resultAccount.getRate());
+            return new AccountDTO(
+                    resultAccount.getNumber(),
+                    resultAccount.getAgency(),
+                    resultAccount.getHolder().getId(),
+                    resultAccount.getTypeAccount().getId(),
+                    resultAccount.getBalance(),
+                    resultAccount.getPerformace(),
+                    resultAccount.getRate()
+            );
       }
-
 
       @Transactional
       public void deleteAccount(Long id) {
-
             var accountEntity = accountRepository.findById(id)
                     .orElseThrow(() -> new BusinessRulesException("Nenhuma conta foi encontrada para esse código."));
 
-            var transferEntity = Optional.of(transferService.findTransfUser(accountEntity.getHolder()))
+            var transferEntity = Optional.ofNullable(transferService.findTransfUser(accountEntity.getHolder()))
                     .orElseThrow(() -> new BusinessRulesException("Transferência não encontrada."));
 
             transferService.deleteTransfer(transferEntity.getId());
             accountRepository.delete(accountEntity);
       }
-
-
 }

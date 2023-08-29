@@ -12,7 +12,6 @@ import java.util.Optional;
 @Service
 public class TypeAccountService {
 
-
       private final TypeAccountRepository typeAccountRepository;
 
       public TypeAccountService(TypeAccountRepository typeAccountRepository) {
@@ -23,8 +22,5 @@ public class TypeAccountService {
       public Optional<TypeAccountEntity> findByTypeAccount(String id) {
             return typeAccountRepository.findById(id);
       }
-
-
-
 
 }
