@@ -5,6 +5,7 @@ import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,14 @@ public class AccountController {
     @GetMapping(value = "/buscarConta")
     public ResponseEntity<AccountDTO> listAccount(@RequestParam Integer numeroConta) {
         return ResponseEntity.ok(accountService.findAccount(numeroConta));
+    }
+
+    @DeleteMapping(value = "/{codigoConta}/deletarConta")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long codigoConta) {
+        accountService.deleteAccount(codigoConta);
+        return ResponseEntity.noContent().build();
+
     }
 
 }
