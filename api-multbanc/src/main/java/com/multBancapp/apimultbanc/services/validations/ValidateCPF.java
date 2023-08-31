@@ -1,6 +1,5 @@
-package com.multBancapp.apimultbanc.services.utils;
+package com.multBancapp.apimultbanc.services.validations;
 
-import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
 
 public class ValidateCPF {

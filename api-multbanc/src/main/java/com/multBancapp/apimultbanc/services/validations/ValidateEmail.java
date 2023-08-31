@@ -1,4 +1,4 @@
-package com.multBancapp.apimultbanc.services.utils;
+package com.multBancapp.apimultbanc.services.validations;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
