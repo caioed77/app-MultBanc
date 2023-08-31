@@ -1,8 +1,5 @@
 package com.multBancapp.apimultbanc.models.dto;
 
-import com.multBancapp.apimultbanc.entities.AccountEntity;
-import jakarta.persistence.ManyToOne;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 

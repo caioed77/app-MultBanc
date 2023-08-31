@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "/buscarConta")
-    public ResponseEntity<AccountDTO> listAccount(@RequestParam Integer numeroConta) {
+    public ResponseEntity<AccountDTO> listAccount(@RequestParam Long numeroConta) {
         return ResponseEntity.ok(accountService.findAccount(numeroConta));
     }
 

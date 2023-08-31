@@ -31,7 +31,7 @@ public class UserController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
       }
 
-      @PutMapping(value = "/atualizar/{id}")
+      @PatchMapping(value = "/atualizar/{id}")
       @ResponseStatus(HttpStatus.ACCEPTED)
       public ResponseEntity updateUser(
               @PathVariable Long id,
