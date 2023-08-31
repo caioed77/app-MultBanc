@@ -3,6 +3,7 @@ package com.multBancapp.apimultbanc.services;
 import com.multBancapp.apimultbanc.entities.TransferEntity;
 import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
+import com.multBancapp.apimultbanc.models.dto.TransferDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class TransferService {
@@ -30,27 +32,32 @@ public class TransferService {
     }
 
     @Transactional
-    public void generatedTransfer(Integer numberSourceAccount, Integer numberDestinationAccount, BigDecimal amount) {
-        var sourceAccount = accountRepository.findByNumberAccount(numberSourceAccount);
-        var destinationAccount = accountRepository.findByNumberAccount(numberDestinationAccount);
+    public void generatedTransfer(TransferDTO transferDTO) {
+        var sourAccount = Optional.ofNullable(accountRepository.findByNumberAccount(transferDTO.sourceAccount()))
+                .orElseThrow(() -> new BusinessRulesException("Código do remetente não encontrado"));
 
-        var userReceiver = userService.findById(sourceAccount.getHolder().getId());
-        var dateAt = Timestamp.valueOf(LocalDateTime.now());
+        var destinationAccount = Optional.ofNullable(accountRepository.findByNumberAccount(transferDTO.destinationAccount()))
+                .orElseThrow(()-> new BusinessRulesException("Código do destinatario não encontrado"));
 
-        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+        var userReceiver = userService.findById(transferDTO.userId())
+                .orElseThrow(() -> new BusinessRulesException("Usuario não encontrado.")) ;
+
+        if (sourAccount.getBalance().compareTo(transferDTO.amount()) < 0) {
             throw new BusinessRulesException("Saldo insuficiente para realizar a transferência");
         } else {
-            var newTransfer = new TransferEntity();
-            newTransfer.setSourceAccount(sourceAccount);
-            newTransfer.setDestinationAccount(destinationAccount);
-            newTransfer.setDataTransfer(dateAt);
-            newTransfer.setUserSender(userReceiver.get());
-            newTransfer.setAmount(amount);
-            newTransfer.setStatus("Concluido");
+            var newTransfer =  TransferEntity.builder()
+                    .destinationAccount(destinationAccount)
+                    .sourceAccount(sourAccount)
+                    .dataTransfer(transferDTO.dataTransfer())
+                    .amount(transferDTO.amount())
+                    .userSender(userReceiver)
+                    .status("Concluido")
+                    .build();
+
             transferRepository.save(newTransfer);
 
-            sourceAccount.toWithdraw(amount);
-            destinationAccount.deposit(amount);
+            sourAccount.toWithdraw(transferDTO.amount());
+            destinationAccount.deposit(transferDTO.amount());
         }
 
     }
@@ -59,7 +66,6 @@ public class TransferService {
     public TransferEntity findTransfUser(UserEntity user) {
         return  transferRepository.findUserTransfer(user.getId());
     }
-
 
     @Transactional
     public void deleteTransfer(Long id) {

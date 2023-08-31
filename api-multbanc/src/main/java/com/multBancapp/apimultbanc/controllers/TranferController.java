@@ -1,7 +1,9 @@
 package com.multBancapp.apimultbanc.controllers;
 
 
+import com.multBancapp.apimultbanc.models.dto.TransferDTO;
 import com.multBancapp.apimultbanc.services.TransferService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +19,10 @@ public class TranferController {
         this.transferService = transferService;
     }
 
-    @PutMapping
-    public ResponseEntity transferAccount(
-            @RequestParam Integer numeroContaOrigem,
-            @RequestParam Integer numeroContaDestino,
-            @RequestParam BigDecimal valorTransferencia) {
-        transferService.generatedTransfer(numeroContaOrigem, numeroContaDestino, valorTransferencia);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity transferAccount(@RequestBody TransferDTO transfer) {
+        transferService.generatedTransfer(transfer);
         return ResponseEntity.ok().build();
     }
 
