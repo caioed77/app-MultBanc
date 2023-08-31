@@ -8,15 +8,14 @@ import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
 import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
 import com.multBancapp.apimultbanc.models.dto.UserDTO;
 import com.multBancapp.apimultbanc.repositories.UserRepository;
-import com.multBancapp.apimultbanc.services.utils.ValidateCPF;
-import com.multBancapp.apimultbanc.services.utils.ValidateEmail;
+import com.multBancapp.apimultbanc.services.validations.ValidateCPF;
+import com.multBancapp.apimultbanc.services.validations.ValidateEmail;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Service
 public class UserService {
@@ -58,17 +57,19 @@ public class UserService {
             );
       }
 
-      public boolean isValid(String email, String senha) {
-            var userResult = userRepository.findByEmail(email);
-                    if (userResult.isPresent()) {
-                          var comparePassword = passwordEncoder.passwordEncoder().matches(senha, userResult.get().getPassword());
+      public boolean isValid(String email, String password) {
+            var userResult = Optional.ofNullable(userRepository.findByEmail(email))
+                    .orElseThrow(() -> new BusinessRulesException("Email não encontrado ou invalido"));
 
-                          if (comparePassword && !userResult.get().getBlocked().equals("T"))
-                                return true;
+            if (userResult.isPresent()) {
+                 var comparePassword = passwordEncoder.passwordEncoder().matches(password, userResult.get().getPassword());
 
-                    } else {
-                          throw  new BusinessRulesException("Usuário não encontrado");;
-                    }
+                 return comparePassword && !userResult.get().getBlocked().equals("T");
+
+           } else {
+                 throw  new BusinessRulesException("Usuário não encontrado");
+           }
+
       }
 
       @Transactional
@@ -76,15 +77,16 @@ public class UserService {
             var validateEmail = new ValidateEmail();
 
             if (validateEmail.validate(userDTO.email())) {
-                  var newUser = new UserEntity();
                   var encryptedPassword = passwordEncoder.passwordEncoder().encode(userDTO.password());
-                  newUser.setEmail(userDTO.email());
-                  newUser.setPassword(encryptedPassword);
+                  var newUser = UserEntity.builder()
+                          .email(userDTO.email())
+                          .password(encryptedPassword)
+                          .build();
+
                   userRepository.save(newUser);
             } else {
                   throw new BusinessRulesException("Email invalido");
             }
-
       }
 
       @Transactional
@@ -95,7 +97,7 @@ public class UserService {
 
                   if (validadeCPF.validade(obj)) {
                         dadosAtt.setDocument(obj.document());
-                        dadosAtt.setTypePerson(obj.typePerson());
+                        dadosAtt.setTypePerson(TypePerson.valueOf(obj.typePerson()));
                         dadosAtt.setImgUser(obj.imgUser());
                         userRepository.save(dadosAtt);
                   } else {
