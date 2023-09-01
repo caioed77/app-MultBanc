@@ -63,13 +63,10 @@ public class UserService {
 
             if (userResult.isPresent()) {
                  var comparePassword = passwordEncoder.passwordEncoder().matches(password, userResult.get().getPassword());
-
                  return comparePassword && !userResult.get().getBlocked().equals("T");
-
            } else {
                  throw  new BusinessRulesException("Usuário não encontrado");
            }
-
       }
 
       @Transactional
