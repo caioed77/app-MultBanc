@@ -15,11 +15,9 @@ public class LoginController {
 
       private final UserService userService;
 
-      @Autowired
       public LoginController(UserService userService) {
             this.userService = userService;
       }
-
 
       @GetMapping(value = "/autenticar")
       public ResponseEntity<Boolean> validadeLogin(@RequestParam String email, @RequestParam String senha) {
