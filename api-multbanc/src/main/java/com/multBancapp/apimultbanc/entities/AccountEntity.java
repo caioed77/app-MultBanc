@@ -39,15 +39,6 @@ public class AccountEntity {
 
       private Double rate;
 
-      public AccountEntity(Integer number, Integer agency, UserEntity holder, TypeAccountEntity typeAccountEntity, BigDecimal balance, BigDecimal performace, Double rate) {
-            this.number = number;
-            this.agency = agency;
-            this.holder = holder;
-            this.typeAccount = typeAccountEntity;
-            this.balance = balance;
-            this.performace = performace;
-            this.rate = rate;
-      }
 
       public void deposit(BigDecimal value) {
             balance = balance.add(value);
