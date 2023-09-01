@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/conta")
@@ -58,9 +59,8 @@ public class AccountController {
     }
 
     @GetMapping(value = "/relatorio")
-    public ResponseEntity<Void> generetedXls(HttpServletResponse response) throws IOException {
-        generatedXLSService.gerarXls(response);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> generetedXls(HttpServletResponse response) throws IOException {
+        return ResponseEntity.of(Optional.ofNullable(generatedXLSService.gerarXls(response)));
     }
 
 }

@@ -19,7 +19,7 @@ public class GeneratedXLSService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public void gerarXls(HttpServletResponse response) throws IOException {
+    public String gerarXls(HttpServletResponse response) throws IOException {
         var dataAccount = accountRepository.findAll();
 
         Workbook workbook = new XSSFWorkbook();
@@ -38,9 +38,9 @@ public class GeneratedXLSService {
 
         try (FileOutputStream fileOut = new FileOutputStream("C:\\Users\\suporte\\Documents\\finance.xlsx")) {
             workbook.write(fileOut);
-            System.out.println("Arquivo Excel gerado com sucesso!");
+            return "Arquivo Excel gerado com sucesso!";
         } catch (IOException e) {
-            System.err.println("Erro ao gerar o arquivo Excel: " + e.getMessage());
+            return "Erro ao gerar o arquivo Excel: " + e.getMessage();
         }
     }
 }
