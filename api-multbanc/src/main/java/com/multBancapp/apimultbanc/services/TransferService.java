@@ -33,10 +33,10 @@ public class TransferService {
 
     @Transactional
     public void generatedTransfer(TransferDTO transferDTO) {
-        var sourAccount = Optional.ofNullable(accountRepository.findByNumberAccount(transferDTO.sourceAccount()))
+        var sourAccount = accountRepository.findById(transferDTO.sourceAccount())
                 .orElseThrow(() -> new BusinessRulesException("Código do remetente não encontrado"));
 
-        var destinationAccount = Optional.ofNullable(accountRepository.findByNumberAccount(transferDTO.destinationAccount()))
+        var destinationAccount = accountRepository.findById(transferDTO.destinationAccount())
                 .orElseThrow(()-> new BusinessRulesException("Código do destinatario não encontrado"));
 
         var userReceiver = userService.findById(transferDTO.userId())

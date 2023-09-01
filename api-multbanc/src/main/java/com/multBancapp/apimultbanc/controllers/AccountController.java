@@ -4,12 +4,15 @@ package com.multBancapp.apimultbanc.controllers;
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.services.AccountService;
+import com.multBancapp.apimultbanc.services.GeneratedXLSService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 @RestController
@@ -18,8 +21,11 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
+    private final GeneratedXLSService generatedXLSService;
+
+    public AccountController(AccountService accountService,GeneratedXLSService generatedXLSService) {
         this.accountService = accountService;
+        this.generatedXLSService = generatedXLSService;
     }
 
     @PostMapping(value = "/cadastrar")
@@ -40,7 +46,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "/buscarConta")
-    public ResponseEntity<AccountDTO> listAccount(@RequestParam Long numeroConta) {
+    public ResponseEntity<AccountDTO> listAccount(@RequestParam Integer numeroConta) {
         return ResponseEntity.ok(accountService.findAccount(numeroConta));
     }
 
@@ -49,7 +55,12 @@ public class AccountController {
     public ResponseEntity<Void> deleteAccount(@PathVariable Long codigoConta) {
         accountService.deleteAccount(codigoConta);
         return ResponseEntity.noContent().build();
+    }
 
+    @GetMapping(value = "/relatorio")
+    public ResponseEntity<Void> generetedXls(HttpServletResponse response) throws IOException {
+        generatedXLSService.gerarXls(response);
+        return ResponseEntity.ok().build();
     }
 
 }
