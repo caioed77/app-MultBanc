@@ -11,5 +11,5 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
       AccountEntity findByAccount(Long holder);
 
       @Query(value = "Select a from AccountEntity a Where a.number = :number")
-      AccountEntity findByNumberAccount(Long number);
+      AccountEntity findByNumberAccount(Integer number);
 }

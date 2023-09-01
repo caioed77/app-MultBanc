@@ -83,7 +83,7 @@ public class AccountService {
       }
 
       @Transactional(readOnly = true)
-      public AccountDTO findAccount(Long number){
+      public AccountDTO findAccount(Integer number){
             var resultAccount = accountRepository.findByNumberAccount(number);
             return new AccountDTO(
                     resultAccount.getNumber(),
