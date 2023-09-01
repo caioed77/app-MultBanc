@@ -1,28 +1,25 @@
 import SearchBar from "../components/SearchBar";
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SideBar from "../components/SideBar";
-import TabPage from "../components/TabPage";
+import Login from "./Login";
 
 export default function Home() {
- 
-  const history = useHistory();
 
-  const handleOptionClick = (option) => {
-    history.push(`/${option}`);
-  };
   return (
     <div className="flex">
-    <SideBar onOptionClick={handleOptionClick} />
-    <div className="flex-1">
-      <SearchBar />
-      <Switch>
-        <Route path="/option1" component={PageOption1} />
-        <Route path="/option2" component={PageOption2} />
-        <Route path="/option3" component={PageOption3} />
-        <Route path="/option4" component={PageOption4} />
-        <Route path="/option5" component={PageOption5} />
-      </Switch>
+      <SideBar />
+      <div className="flex-1">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />}>
+              <Route path=":movieId" element={<Login />} />
+            </Route>
+            <Route path="/create" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </div>
-  </div>
   );
 }
