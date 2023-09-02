@@ -45,7 +45,6 @@ public class TransferService {
                 .orElseThrow(() -> new BusinessRulesException("Usuario não encontrado.")) ;
 
 
-
         if (sourAccount.getBalance().compareTo(transferDTO.amount()) < 0) {
             throw new BusinessRulesException("Saldo insuficiente para realizar a transferência");
         } else {
