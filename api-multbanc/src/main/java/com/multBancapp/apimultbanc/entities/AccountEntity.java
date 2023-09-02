@@ -23,6 +23,7 @@ public class AccountEntity {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
 
+      @Column(name = "number_account")
       private Integer number;
 
       private Integer agency;
