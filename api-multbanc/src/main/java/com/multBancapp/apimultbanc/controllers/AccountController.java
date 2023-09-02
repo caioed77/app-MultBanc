@@ -35,14 +35,14 @@ public class AccountController {
     }
 
     @PutMapping(value = "/deposito")
-    public ResponseEntity depositAccount(@RequestParam BigDecimal amount, @RequestParam String documento) {
-        accountService.depositAccount(amount, documento);
+    public ResponseEntity depositAccount(@RequestParam BigDecimal valorDeposito, @RequestParam Integer numeroConta) {
+        accountService.depositAccount(valorDeposito, numeroConta);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/saque")
-    public ResponseEntity withdrawAccount(@RequestParam BigDecimal amount, @RequestParam String documento) {
-        accountService.withdrawAccount(amount, documento, 5.0);
+    public ResponseEntity withdrawAccount(@RequestParam BigDecimal valorSaque, @RequestParam Integer numeroConta) {
+        accountService.withdrawAccount(valorSaque, numeroConta, 5.0);
         return ResponseEntity.ok().build();
     }
 
