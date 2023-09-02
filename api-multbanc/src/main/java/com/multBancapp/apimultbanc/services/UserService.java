@@ -1,6 +1,6 @@
 package com.multBancapp.apimultbanc.services;
 
-import com.multBancapp.apimultbanc.config.SecurityConfig;
+import com.multBancapp.apimultbanc.config.AuthSecurityConfig;
 import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.entities.enums.TypePerson;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
@@ -23,7 +23,7 @@ public class UserService {
       private final UserRepository userRepository;
 
       @Autowired
-      private SecurityConfig passwordEncoder;
+      private AuthSecurityConfig passwordEncoder;
 
       public UserService(UserRepository userRepository){
             this.userRepository = userRepository;
