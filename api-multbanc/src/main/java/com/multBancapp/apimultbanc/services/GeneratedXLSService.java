@@ -25,7 +25,7 @@ public class GeneratedXLSService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public String gerarXls(HttpServletResponse response) throws IOException {
+    public String generatedXls(HttpServletResponse response) throws IOException {
           var dataAccount = accountRepository.listTranferAccounts();
 
         List<ListTransferQuantitiesDTO> dataResult = new ArrayList<>();

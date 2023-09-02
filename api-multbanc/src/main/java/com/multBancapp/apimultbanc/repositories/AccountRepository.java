@@ -17,10 +17,10 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
       AccountEntity findByNumberAccount(Integer number);
 
       @Query(nativeQuery = true, value = """
-                select c.number_account as numAccount, u.email, count(c.holder_id) as qte from tb_conta c
+                 select c.number_account as numAccount, u.email, count(c.holder_id) as qte from tb_conta c
                                              inner join tb_transferencia t on (t.source_account_id = c.id)
                                              inner join tb_usuarios u on (u.id = c.holder_id)
                   group by u.email, c.number_account
-              """)
+      """)
       List<ListTransferQuantitiesProjection> listTranferAccounts();
 }

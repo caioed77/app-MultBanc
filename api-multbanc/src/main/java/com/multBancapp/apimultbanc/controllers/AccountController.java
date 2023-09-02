@@ -53,14 +53,14 @@ public class AccountController {
 
     @DeleteMapping(value = "/{codigoConta}/deletarConta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long codigoConta) {
-        accountService.deleteAccount(codigoConta);
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long codigo) {
+        accountService.deleteAccount(codigo);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/relatorio")
     public ResponseEntity<String> generetedXls(HttpServletResponse response) throws IOException {
-        return ResponseEntity.of(Optional.ofNullable(generatedXLSService.gerarXls(response)));
+        return ResponseEntity.of(Optional.ofNullable(generatedXLSService.generatedXls(response)));
     }
 
 }
