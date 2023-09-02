@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -39,8 +41,10 @@ public class TransferService {
         var destinationAccount = accountRepository.findById(transferDTO.destinationAccount())
                 .orElseThrow(()-> new BusinessRulesException("Código do destinatario não encontrado"));
 
-        var userReceiver = userService.findById(transferDTO.userId())
+        var userReceiver = userService.findById(sourAccount.getHolder().getId())
                 .orElseThrow(() -> new BusinessRulesException("Usuario não encontrado.")) ;
+
+
 
         if (sourAccount.getBalance().compareTo(transferDTO.amount()) < 0) {
             throw new BusinessRulesException("Saldo insuficiente para realizar a transferência");
@@ -48,7 +52,7 @@ public class TransferService {
             var newTransfer =  TransferEntity.builder()
                     .destinationAccount(destinationAccount)
                     .sourceAccount(sourAccount)
-                    .dataTransfer(transferDTO.dataTransfer())
+                    .dataTransfer(Timestamp.valueOf(LocalDateTime.now()))
                     .amount(transferDTO.amount())
                     .userSender(userReceiver)
                     .status("Concluido")

@@ -53,30 +53,27 @@ public class AccountService {
       }
 
       @Transactional
-      public void depositAccount(BigDecimal amount, String document) {
-            var userCode = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userCode.getId()))
-                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
+      public void depositAccount(BigDecimal amount, Integer numberAccount) {
+            var accountResult = Optional.ofNullable(accountRepository.findByNumberAccount(numberAccount))
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
-                        account.deposit(amount);
+                        accountResult.deposit(amount);
                   } else {
                         throw new BusinessRulesException("O valor informado não pode ser zero.");
                   }
       }
 
       @Transactional
-      public void withdrawAccount(BigDecimal amount, String document, Double rate) {
-            var userAccount = userService.findByDocument(document);
-            var account = Optional.ofNullable(accountRepository.findByAccount(userAccount.getId()))
-                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada ou documento informado inválido."));
+      public void withdrawAccount(BigDecimal amount, Integer numberAccount, Double rate) {
+            var accountResult = Optional.ofNullable(accountRepository.findByNumberAccount(numberAccount))
+                    .orElseThrow(() -> new BusinessRulesException("Conta não encontrada."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
-                        switch (account.getTypeAccount().getId()) {
-                              case "C"  -> account.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
-                              case "P"  -> account.toWithdraw(amount);
+                        switch (accountResult.getTypeAccount().getId()) {
+                              case "C"  -> accountResult.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
+                              case "P"  -> accountResult.toWithdraw(amount);
                         }
-                        accountRepository.saveAndFlush(account);
                   } else {
                         throw new BusinessRulesException("O valor informado não pode ser zero.");
                  }
