@@ -1,7 +1,4 @@
-import SearchBar from "../components/SearchBar";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SideBar from "../components/SideBar";
-import Login from "./Login";
 
 export default function Home() {
   return (
