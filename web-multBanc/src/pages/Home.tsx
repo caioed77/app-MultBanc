@@ -9,7 +9,7 @@ export default function Home() {
       <SideBar />
       <div className="bg-gray-200 min-h-screen p-4 w-screen overflow-hidden">
         <header className="bg-black p-4 text-white">
-          <nav className="flex justify-end space-x-4">                 
+          <nav className="flex justify-end space-x-4">
             <a href="#" className="hover:underline">Configurações</a>
           </nav>
         </header>
@@ -28,5 +28,6 @@ export default function Home() {
           </div>
         </main>
       </div>
+    </div>
   );
 }
