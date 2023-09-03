@@ -59,14 +59,10 @@ public class UserService {
 
       public boolean isValid(String email, String password) {
             var userResult = Optional.ofNullable(userRepository.findByEmail(email))
-                    .orElseThrow(() -> new BusinessRulesException("Email não encontrado ou invalido"));
+                    .orElseThrow(() -> new BusinessRulesException("Usuário não encontrado"));
+            var comparePassword = passwordEncoder.passwordEncoder().matches(password, userResult.get().getPassword());
+            return comparePassword && !userResult.get().getBlocked().contentEquals("T");
 
-            if (userResult.isPresent()) {
-                 var comparePassword = passwordEncoder.passwordEncoder().matches(password, userResult.get().getPassword());
-                 return comparePassword && !userResult.get().getBlocked().equals("T");
-           } else {
-                 throw  new BusinessRulesException("Usuário não encontrado");
-           }
       }
 
       @Transactional
@@ -78,6 +74,7 @@ public class UserService {
                   var newUser = UserEntity.builder()
                           .email(userDTO.email())
                           .password(encryptedPassword)
+                          .blocked("F")
                           .build();
 
                   userRepository.save(newUser);
