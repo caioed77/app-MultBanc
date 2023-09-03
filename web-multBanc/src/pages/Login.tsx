@@ -1,6 +1,30 @@
+
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import { useState } from "react";
+import { api } from "../service/api";
 
 export default function Login() {
+
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  async function validateLogin(){
+    try {
+      const url = `/login/autenticar?email=${user}&senha=${password}`;
+      const response = await api.get(url);
+
+      if (response.status === 202) {
+        navigate("/home");
+      } else {
+        console.error("Erro de autenticação");
+      }
+    } catch (error) {
+      console.error("Erro na requisição", error);
+    }
+  }
+
   return (
     <>
       <NavBar />
@@ -18,18 +42,25 @@ export default function Login() {
           <label className="text-4xl font-extrabold font-mono mb-6">Realizar Login</label>
           <div className="flex flex-col gap-2 mt-8">
             <input
+              className="border rounded text-lg font-bold text-black py-3 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="text"
               placeholder="Email"
-              className="border rounded text-lg font-bold text-black py-3 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
             />
             <input
+              className="border rounded text-lg Pfont-bold text-black py-3 px-3 mt-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="password"
-              placeholder="Senha"
-              className="border rounded text-lg font-bold text-black py-3 px-3 mt-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Senha"              
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <div className="flex flex-col gap-3 justify-center">
-              <button className="bg-violet-600 group rounded-lg border border-transparent px-10 py-4 transition-colors hover:border-violet-400 hover:bg-violet-400 hover:dark:border-violet-300 hover:dark:bg-neutral-800/30">Entrar</button>
 
+                <div onClick={validateLogin} className="w-full inline-flex items-center justify-center bg-violet-600 group rounded-lg border border-transparent px-10 py-4 transition-colors hover:border-violet-400 hover:bg-violet-400 hover:dark:border-violet-300 hover:dark:bg-neutral-800/30">
+                   Entrar
+                </div>
+            
               <button className="mt-5 w-36 text-white px-2 py-2">
                 Cadastrar-me
               </button>
