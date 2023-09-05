@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../service/api";
 
-export default function Register() {  
+export default function Register() {
   const [user, setUser] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  function handleBackPage(){
+  function handleBackPage() {
     navigate("/")
   }
 
@@ -24,9 +24,9 @@ export default function Register() {
         email: user,
         password: senha,
       });
-  
+
       if (response.status === 201) {
-        alert("Usuário cadastrado com sucesso!");        
+        alert("Usuário cadastrado com sucesso!");
       } else {
         alert("Erro ao cadastrar o usuário.");
       }
@@ -36,7 +36,7 @@ export default function Register() {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center">     
+    <div className="min-h-screen flex items-center justify-center">
       <div className="bg-black p-10 rounded-lg shadow-lg">
         <h2 className="text-2xl text-white font-roboto font-semibold mb-3">Cadastro de Usuário</h2>
         <form>
@@ -50,7 +50,7 @@ export default function Register() {
               name="nome"
               className="w-full border border-purple-600 p-2 rounded focus:outline-none focus:border-purple-700"
               value={user}
-              onChange={(e) => setUser(e.target.value)} 
+              onChange={(e) => setUser(e.target.value)}
               required
             />
           </div>
@@ -84,13 +84,13 @@ export default function Register() {
           </div>
           <div className="flex flex-row gap-5 justify-center items-center">
             <button
-            onClick={handleCreateUser}
+              onClick={handleCreateUser}
               type="submit"
               className="bg-violet-600 text-white font-semibold px-4 py-2 rounded hover:bg-violet-700"
             >
               Cadastrar
             </button>
-            <button 
+            <button
               onClick={handleBackPage}
               type="reset"
               className="bg-violet-600 text-white font-semibold px-4 py-2 rounded hover:bg-violet-700"
