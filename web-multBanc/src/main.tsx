@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import MyAccount from './pages/MyAccount';
+import '@radix-ui/themes/styles.css';
+import CashMachine from './pages/CashMachine';
 
 
 const router = createBrowserRouter([
@@ -24,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "minhaConta",
         element: <MyAccount />,
+      },
+      {
+        path: "saqueDeposito",
+        element: <CashMachine />,
       },
     ],
   },
