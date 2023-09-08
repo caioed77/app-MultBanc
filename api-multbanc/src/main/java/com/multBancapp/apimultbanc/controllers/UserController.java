@@ -1,9 +1,11 @@
 package com.multBancapp.apimultbanc.controllers;
 
+import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.models.dto.UpdateUserDTO;
 import com.multBancapp.apimultbanc.models.dto.UserDTO;
 import com.multBancapp.apimultbanc.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

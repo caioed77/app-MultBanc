@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,7 +28,7 @@ public class UserService {
       @Autowired
       private AuthSecurityConfig passwordEncoder;
 
-      public UserService(UserRepository userRepository){
+      public UserService(UserRepository userRepository) {
             this.userRepository = userRepository;
       }
 
@@ -35,14 +38,14 @@ public class UserService {
       }
 
       public UserEntity findByDocument(String document) {
-            Optional<UserEntity> result =  Optional.ofNullable(userRepository.findDocument(document));
-            return result.orElseThrow(() -> new BusinessRulesException("Documento invalido"));
+            Optional<UserEntity> result = Optional.ofNullable(userRepository.findDocument(document));
+            return result.orElseThrow(() -> new BusinessRulesException("Usuário não encotrado."));
       }
 
       @Transactional(readOnly = true)
-      public UserDTO findUser(String document) {
-            var resultDocument = Optional.ofNullable(userRepository.findDocument(document))
-                    .orElseThrow(() -> new BusinessRulesException("Documento não encontrado."));
+      public UserDTO findUser(String email) {
+            var resultDocument = Optional.of(userRepository.findByEmail(email).get())
+                    .orElseThrow(() -> new BusinessRulesException("Usuário não encotrado."));
 
             TypePerson personType = TypePerson.FISICA;
             String personTypeString = personType.name();
@@ -66,7 +69,7 @@ public class UserService {
       }
 
       @Transactional
-      public void  registerLogin(UserDTO userDTO) {
+      public void registerLogin(UserDTO userDTO) {
             var validateEmail = new ValidateEmail();
 
             if (validateEmail.validate(userDTO.email())) {
@@ -84,14 +87,14 @@ public class UserService {
       }
 
       @Transactional
-      public void changeUser(Long id, UpdateUserDTO obj){
+      public void changeUser(Long id, UpdateUserDTO obj) {
             try {
                   var validadeCPF = new ValidateCPF();
                   UserEntity dadosAtt = userRepository.getReferenceById(id);
 
                   if (validadeCPF.validade(obj)) {
                         dadosAtt.setDocument(obj.document());
-                        dadosAtt.setTypePerson(TypePerson.valueOf(obj.typePerson()));
+                        dadosAtt.setTypePerson(TypePerson.valueOf(obj.typePerson().toUpperCase()));
                         dadosAtt.setImgUser(obj.imgUser());
                         userRepository.save(dadosAtt);
                   } else {
@@ -101,5 +104,6 @@ public class UserService {
                   throw new ResouceNotFoundException(id);
             }
       }
+
 
 }

@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import { useState } from "react";
 import { api } from "../service/api";
 import { ErrLogin } from "../components/errLogin";
+import { useUser } from "../context/authContext";
 
 export default function Login() {
 
@@ -11,6 +12,8 @@ export default function Login() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const { loginUser } = useUser();
 
   function closeModal() {
     setOpenModal(false)
@@ -20,8 +23,12 @@ export default function Login() {
     try {
       const response = await api.get(`/login/autenticar?email=${user}&senha=${password}`);
 
-      if (response.status === 202)
+      if (response.status === 202){
+        loginUser(response.data)
+        localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/home")
+      }       
+        
 
     } catch (error) {
       setOpenModal(true);
