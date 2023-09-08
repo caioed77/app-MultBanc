@@ -24,9 +24,9 @@ export default function MyAccount() {
   }
 
   return (
-    <div className="bg-black rounded-lg shadow-lg p-10 relative">
-      <h1 className="text-4xl text-white font-semibold mb-4">Minha Conta</h1>
-      <div className="flex flex-col space-y-4 w-[430px] h-[350px] mt-10">
+    <div className="bg-black rounded-lg shadow-lg p-8 relative">
+      <h1 className="text-4xl text-white font-semibold mb-2">Minha Conta</h1>
+      <div className="flex flex-col space-y-4 w-[430px] h-[350px] mt-5">
         <div className="flex flex-col">
           <label className="text-lg text-white mb-2">Tipo de Pessoa:</label>
           <select
