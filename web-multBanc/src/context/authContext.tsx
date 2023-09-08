@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { TAccountItens } from "../@Types/AccountItens";
 
 type UserContextType = {
@@ -17,6 +17,15 @@ type UserProviderProps = {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<TAccountItens | null>(null);
   
+
+    useEffect(() => {
+        const userStorage = localStorage.getItem("user");
+    
+        if (userStorage) {
+          setUser(JSON.parse(userStorage));
+        }
+      }, []);
+
     function loginUser(userData: TAccountItens) {
       setUser(userData);
     }

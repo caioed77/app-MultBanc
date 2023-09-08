@@ -1,5 +1,5 @@
 export default function CashMachine() {
     return (
-       <p>ola</p>
+       <div className="overflow-hidden">ola</div>
     );
 }

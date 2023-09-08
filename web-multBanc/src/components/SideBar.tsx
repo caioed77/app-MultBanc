@@ -4,7 +4,7 @@ export default function SideBar() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-black w-1/7 h-screen p-4">
+    <div className="bg-black w-1/7 h-screen p-6">
       <h2 className="text-2xl text-white font-roboto m-8">Multbanc</h2>
       <ul className="m-10 flex flex-col gap-5">
         <li>
