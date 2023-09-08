@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import MyAccount from './pages/MyAccount';
 import '@radix-ui/themes/styles.css';
 import CashMachine from './pages/CashMachine';
+import { UserProvider } from './context/authContext';
 
 
 const router = createBrowserRouter([
@@ -37,7 +38,9 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+  <UserProvider>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>,
+  </UserProvider>
 )
