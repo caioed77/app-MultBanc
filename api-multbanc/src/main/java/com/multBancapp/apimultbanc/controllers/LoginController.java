@@ -20,11 +20,11 @@ public class LoginController {
       }
 
       @GetMapping(value = "/autenticar")
-      public ResponseEntity<Boolean> validadeLogin(@RequestParam String email, @RequestParam String senha) {
+      public ResponseEntity<UserDTO> validadeLogin(@RequestParam String email, @RequestParam String senha) {
             if (userService.isValid(email, senha))
-                  return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+                  return new ResponseEntity<>(userService.findUser(email), HttpStatus.ACCEPTED);
 
-            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
       }
 
       @PostMapping(value = "/novoUsuario")
