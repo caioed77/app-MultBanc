@@ -1,21 +1,23 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useUser } from '../context/authContext'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { TAccount } from '../@Types/Account'
+import { api } from '../service/api'
+import { SignOut } from '@phosphor-icons/react'
 
 const navigation = [
   { name: 'Conta', href: 'minhaConta', current: true },
   { name: 'Saque', href: 'saqueDeposito', current: false },
   { name: 'Deposito', href: 'saqueDeposito', current: false },
   { name: 'Relatorio', href: 'relatorio', current: false },
-  { name: 'Configurações', href: 'configuracaoAccount', current: false },
+  { name: 'Usuário da conta', href: 'configuracaoAccount', current: false },
 ]
-const userNavigation = [
-  { name: 'Minha conta', href: '#' },  
-  { name: 'Sign out', href: '#' },
+const userNavigation = [ 
+  { name: 'Configurações', href: '#' },
+  { name: 'Sign out', href: '/' },  
 ]
-
 
 export default function Home() {
 
@@ -25,6 +27,18 @@ export default function Home() {
 
   const user = useUser();
   const navigate = useNavigate();
+  const [account, setAccount] = useState<TAccount | undefined>(undefined);
+
+  useEffect(() => {    
+    api.get(`/conta/${user.user?.user}/buscarConta`)
+      .then((response) => {
+        setAccount(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro na chamada da API:", error);
+      });
+  }, [user.user]);
+
 
   function logout() {
     user.logout();
@@ -41,7 +55,7 @@ export default function Home() {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 text-white font-semibold text-2xl">
-                      <p>MultBanc</p>
+                      <a href="/home">MultBanc</a>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
@@ -70,11 +84,12 @@ export default function Home() {
                       <button
                         type="button"
                         className="relative rounded-full bg-primary p-1 text-gray-400 hover:text-white focus:outline-none"
+                        onClick={() => logout()}
                       >
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                        <SignOut className="h-6 w-6" aria-hidden="true" />                        
+                      </button>                      
 
                       <Menu as="div" className="relative ml-3">
                         <div>
@@ -84,6 +99,7 @@ export default function Home() {
                             <img className="h-8 w-8 rounded-full" src={user.user?.imgUser} alt="" />
                           </Menu.Button>
                         </div>
+                        
                         <Transition
                           as={Fragment}
                           enter="transition ease-out duration-100"
@@ -113,8 +129,7 @@ export default function Home() {
                             ))}
                           </Menu.Items>
                         </Transition>
-                      </Menu>
-
+                      </Menu>                     
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -126,7 +141,7 @@ export default function Home() {
                       ) : (
                         <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                       )}
-                    </Disclosure.Button>
+                    </Disclosure.Button>                   
                   </div>
                 </div>
               </div>
@@ -163,7 +178,7 @@ export default function Home() {
                     >
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <BellIcon className="h-6 w-6" aria-hidden="true" />                      
                     </button>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
@@ -183,9 +198,10 @@ export default function Home() {
             </>
           )}
         </Disclosure>
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Minha Conta</h1>
+        <header className="shadow-xl bg-white border">
+          <div className="grid grid-cols-2 gap-5 items-start mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 className="bg-primary text-2xl rounded-xl px-3 py-3 font-bold tracking-tigh text-white">Saldo : R${account ? account?.balance.toFixed(2) : "0,00"}</h1>                        
+            <h1 className="bg-primary text-2xl rounded-xl px-3 py-3 font-bold tracking-tight text-white">Rendimento : {account ? account?.performace.toFixed(1) : "0,0"}%</h1>
           </div>
         </header>
         <main>

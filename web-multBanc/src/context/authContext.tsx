@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { TAccountItens } from "../@Types/AccountItens";
+import { TUserItens } from "../@Types/UserItens";
 
 type UserContextType = {
-    user: TAccountItens | null;
-    loginUser: (userData: TAccountItens) => void;
+    user: TUserItens | null;
+    loginUser: (userData: TUserItens) => void;
     logout: () => void;
 };
 
@@ -15,7 +15,7 @@ type UserProviderProps = {
     children: ReactNode;
 };
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<TAccountItens | null>(null);
+    const [user, setUser] = useState<TUserItens | null>(null);
   
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
       }, []);
 
-    function loginUser(userData: TAccountItens) {
+    function loginUser(userData: TUserItens) {
       setUser(userData);
     }
   

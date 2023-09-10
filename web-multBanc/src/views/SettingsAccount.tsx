@@ -33,7 +33,7 @@ export default function SettingsAccount() {
 
   return (
     <div className="bg-primary rounded-lg shadow-lg p-8 relative">
-      <h1 className="text-4xl text-white font-semibold mb-2">Configurações do usuário</h1>
+      <h1 className="text-2xl text-white font-semibold mb-2">Configurações do usuário</h1>
       <div className="flex flex-col space-y-4 w-[430px] h-[350px] mt-5">
         <div className="flex flex-col">
           <label className="text-lg text-white mb-2">Tipo de Pessoa:</label>
@@ -67,18 +67,12 @@ export default function SettingsAccount() {
           />
         </div>
       </div>
-      <div className="flex gap-5 absolute bottom-4 right-4">
+      <div className="flex gap-5 absolute bottom-4 right-4">        
         <button
           className="bg-button hover:bg-green-600 text-white font-semibold px-6 py-2 rounded"
           onClick={handleUpdateAccount}
         >
-          Editar
-        </button>
-        <button
-          className="bg-button hover:bg-green-600 text-white font-semibold px-6 py-2 rounded"
-          onClick={handleUpdateAccount}
-        >
-          Salvar
+          Alterar
         </button>
         {openModal && <ErrLogin onClose={closeModal} mensagem="CPF invalido, verifique!" />}
       </div>
