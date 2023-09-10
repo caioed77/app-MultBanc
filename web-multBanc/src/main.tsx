@@ -1,15 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Register from './pages/Register';
-import MyAccount from './pages/MyAccount';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Login from './views/Login';
+import Home from './views/Home';
+import Register from './views/Register';
+import MyAccount from './views/MyAccount';
 import '@radix-ui/themes/styles.css';
-import CashMachine from './pages/CashMachine';
+import CashMachine from './views/CashMachine';
 import { UserProvider } from './context/authContext';
-
+import SettingsAccount from './views/SettingsAccount';
 
 const router = createBrowserRouter([
   {
@@ -32,10 +32,13 @@ const router = createBrowserRouter([
         path: "saqueDeposito",
         element: <CashMachine />,
       },
+      {
+        path: "configuracaoAccount",
+        element: <SettingsAccount />,
+      },
     ],
   },
 ]);
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <UserProvider>
