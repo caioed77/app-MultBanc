@@ -80,8 +80,8 @@ public class AccountService {
       }
 
       @Transactional(readOnly = true)
-      public AccountDTO findAccount(Integer number){
-            var resultAccount = accountRepository.findByNumberAccount(number);
+      public AccountDTO findAccount(Long  userId){
+            var resultAccount = accountRepository.findByAccountUser(userId);
             return new AccountDTO(
                     resultAccount.getNumber(),
                     resultAccount.getAgency(),

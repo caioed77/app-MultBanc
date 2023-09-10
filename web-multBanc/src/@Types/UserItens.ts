@@ -1,4 +1,4 @@
-export interface TAccountItens {
+export interface TUserItens {
     email: string,
     document: string,
     typePerson: string,

@@ -46,9 +46,9 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/buscarConta")
-    public ResponseEntity<AccountDTO> listAccount(@RequestParam Integer numeroConta) {
-        return ResponseEntity.ok(accountService.findAccount(numeroConta));
+    @GetMapping(value = "/{userId}/buscarConta")
+    public ResponseEntity<AccountDTO> listAccount(@PathVariable Long userId) {
+        return ResponseEntity.ok(accountService.findAccount(userId));
     }
 
     @DeleteMapping(value = "/{codigoConta}/deletarConta")

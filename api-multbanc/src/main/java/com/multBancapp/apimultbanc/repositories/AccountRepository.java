@@ -9,7 +9,12 @@ import java.util.List;
 
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
-      @Query(value = "SELECT a FROM AccountEntity a WHERE a.holder = :holder")
+      @Query(nativeQuery = true, value = """
+              Select a.agency, a.balance, a.holder_id, a.id, a.number_account, a.performace, a.rate,
+                   a.type_account_id
+              from tb_conta a 
+              WHERE a.holder_id = :holder
+       """)
       AccountEntity findByAccountUser(Long holder);
 
       @Query(value = "Select a from AccountEntity a Where a.number = :number")
