@@ -10,20 +10,23 @@ export default function MyAccount() {
   const [saldo, setSaldo] = useState(0);
   const [rendimento, setRendimento] = useState(0);
   const { user } = useUser();
-
+ 
   async function handleCreateAccount() {
     try {
-      const response = await api.put('conta/cadastrar/', {
+      
+      const response = await api.put('conta/cadastrar/', {                      
         agency: agencia,
         number: numConta,
         holder: user?.user,
         typeAccount: tipoConta,
         balance: saldo,
-        performace: rendimento
+        performace: rendimento            
       });
 
-      if (response.status === 201) {
-        alert('Conta cadastrada com sucesso!');
+      if (response.status === 201) {        
+        alert('Conta cadastrada com sucesso!')
+      } else {
+        alert('Conta cadastrar com sucesso')
       }
 
     } catch (error) {

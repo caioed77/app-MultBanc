@@ -1,9 +1,8 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useState } from "react";
 import { api } from "../service/api";
-import { ErrLogin } from "../components/modalError/errResult";
+import { ResultModalErro } from "../components/Dialogs/resultModalErro";
 import { useUser } from "../context/authContext";
 
 export default function Login() {
@@ -72,7 +71,7 @@ export default function Login() {
               <button type="submit" onClick={validateLogin} className="w-full inline-flex items-center justify-center bg-button group rounded-lg border border-transparent px-10 py-4 transition-colors hover:border-violet-400 hover:bg-violet-400 hover:dark:border-violet-300 hover:dark:bg-neutral-800/30">
                 Entrar
               </button>
-              {openModal && <ErrLogin onClose={closeModal} mensagem="Usuário ou senha invalido!" />}
+              {openModal && <ResultModalErro onClose={closeModal} mensagem="Usuário ou senha invalido!" />}
               <button className="mt-5 w-36 text-white px-2 py-2">
                 <Link to="/register">Cadastrar-me</Link>
               </button>
