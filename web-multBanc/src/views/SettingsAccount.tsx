@@ -80,7 +80,7 @@ export default function SettingsAccount() {
       </div>
       <div className="flex gap-5 absolute bottom-4 right-4">
         <button
-          className="bg-button hover:bg-green-600 text-white font-semibold px-6 py-2 rounded"
+          className="bg-button hover:bg-zinc-500 text-white font-semibold px-6 py-2 rounded"
           onClick={handleUpdateAccount}
         >
           Alterar

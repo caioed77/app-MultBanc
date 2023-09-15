@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../service/api";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 export default function Register() {
   const [user, setUser] = useState('');
@@ -36,70 +37,60 @@ export default function Register() {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center relative">
-      <div className="bg-primary p-10 rounded-lg shadow-lg">
-        <h2 className="text-2xl text-white font-roboto font-semibold mb-3">Cadastro de Usuário</h2>
-        <form>
-          <div className="mb-4">
-            <label htmlFor="nome" className="block text-white font-semibold">
-              Nome
-            </label>
-            <input
-              type="text"
-              id="nome"
-              name="nome"
-              className="w-full border border-purple-600 p-2 rounded focus:outline-none focus:border-purple-700"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              required
-            />
+
+    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-zinc-200 py-6 sm:py-12">
+      <div className="relative bg-primary px-6 pt-10 pb-8 shadow-xl mx-auto w-full sm:max-w-md sm:rounded-lg sm:px-10 mt-2">
+        <button onClick={handleBackPage}>{<ArrowLeft size={32}/>}</button>
+        <div className="mx-auto max-w-md">
+          <div className="space-y-6 py-5 text-base leading-7 text-gray-600">
+            <form>
+              <div className="mb-6">                
+                <input
+                  type="Email"
+                  id="Email"
+                  name="Email"
+                  className="w-full border-0 border-purple-600 p-2 rounded focus:outline-none focus:border-purple-700"
+                  placeholder="Email"
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-6">                
+                <input
+                  type="password"
+                  id="nome"
+                  name="nome"
+                  className="w-full border-0 border-violet-600 p-2 rounded focus:outline-none focus:border-violet-700"
+                  placeholder="Senha"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-6">                
+                <input
+                  type="password"
+                  id="nome"
+                  name="nome"
+                  className="w-full border-0 border-violet-600 p-2 rounded focus:outline-none focus:border-violet-700"
+                  placeholder="Confirmar senha"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <button
+                onClick={handleCreateUser}                
+                className="bg-black text-white w-full font-semibold px-4 py-3 mt-5 rounded hover:bg-zinc-800"
+              >
+                Cadastrar
+              </button>
+            </form>
           </div>
-          <div className="mb-4">
-            <label htmlFor="nome" className="block text-white font-semibold">
-              Senha
-            </label>
-            <input
-              type="password"
-              id="nome"
-              name="nome"
-              className="w-full border border-violet-600 p-2 rounded focus:outline-none focus:border-violet-700"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="nome" className="block text-white font-semibold">
-              Confirme sua senha
-            </label>
-            <input
-              type="password"
-              id="nome"
-              name="nome"
-              className="w-full border border-violet-600 p-2 rounded focus:outline-none focus:border-violet-700"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-row gap-5 justify-center items-center">
-            <button
-              onClick={handleCreateUser}
-              type="submit"
-              className="bg-button text-white font-semibold px-4 py-2 rounded hover:bg-green-600"
-            >
-              Cadastrar
-            </button>
-            <button
-              onClick={handleBackPage}
-              type="reset"
-              className="bg-button text-white font-semibold px-4 py-2 rounded hover:bg-green-600"
-            >
-              Voltar
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
+
   );
 }

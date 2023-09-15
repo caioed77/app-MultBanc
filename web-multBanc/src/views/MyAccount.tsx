@@ -1,3 +1,4 @@
+import { ResultModal } from "../components/Dialogs/resultModal";
 import { useUser } from "../context/authContext";
 import { api } from "../service/api";
 import { useState } from "react";
@@ -9,12 +10,16 @@ export default function MyAccount() {
   const [tipoConta, setTipoConta] = useState('');
   const [saldo, setSaldo] = useState(0);
   const [rendimento, setRendimento] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
   const { user } = useUser();
  
+  function closeModal() {
+    setOpenModal(false)
+  }
+
   async function handleCreateAccount() {
     try {
-      
-      const response = await api.put('conta/cadastrar/', {                      
+      const response = await api.post('conta/cadastrar', {                      
         agency: agencia,
         number: numConta,
         holder: user?.user,
@@ -24,7 +29,7 @@ export default function MyAccount() {
       });
 
       if (response.status === 201) {        
-        alert('Conta cadastrada com sucesso!')
+        setOpenModal(true)
       } else {
         alert('Conta cadastrar com sucesso')
       }
@@ -56,7 +61,7 @@ export default function MyAccount() {
           </div>
 
           <div className="sm:col-span-3">
-            <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-white">
+            <label htmlFor="last-name" className="block text-md font-medium leading-6 text-white">
               Agência
             </label>
             <div className="mt-2">
@@ -73,7 +78,7 @@ export default function MyAccount() {
           </div>
 
           <div className="sm:col-span-3">
-            <label htmlFor="country" className="block text-sm font-medium leading-6 text-white">
+            <label htmlFor="country" className="block text-md font-medium leading-6 text-white">
               Tipo da conta
             </label>
             <div className="mt-2">
@@ -81,17 +86,17 @@ export default function MyAccount() {
                 id="country"
                 name="country"
                 autoComplete="country-name"
-                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none sm:max-w-xs sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-md ring-1 ring-inset ring-gray-300 focus:outline-none sm:max-w-xs sm:text-sm sm:leading-6"
                 value={tipoConta}
                 onChange={(e) => setTipoConta(e.currentTarget.value)}
               >
-                <option>Poupança</option>
-                <option>Corrente</option>
+                <option value="P">Poupança</option>
+                <option value="C">Corrente</option>
               </select>
             </div>
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="region" className="block text-sm font-medium leading-6 text-white">
+            <label htmlFor="region" className="block text-md font-medium leading-6 text-white">
               Saldo Inicial
             </label>
             <div className="mt-2">
@@ -107,7 +112,7 @@ export default function MyAccount() {
             </div>
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="postal-code" className="block text-sm font-medium leading-6 text-white">
+            <label htmlFor="postal-code" className="block text-md font-medium leading-6 text-white">
               Rendimento
             </label>
             <div className="mt-2">
@@ -126,13 +131,13 @@ export default function MyAccount() {
       </div>
       <div className="flex gap-5 absolute bottom-4 right-4">
         <button
-          className="bg-button hover:bg-green-600 text-white font-semibold px-6 py-2 rounded"
+          className="bg-button hover:bg-zinc-500 text-white font-semibold px-6 py-2 rounded"
           onClick={handleCreateAccount}
         >
           Cadastrar
         </button>
-      </div>
-
+        {openModal && <ResultModal onClose={closeModal} mensagem="Conta cadastrada com sucesso" />}
+      </div>      
     </form>
   );
 }
