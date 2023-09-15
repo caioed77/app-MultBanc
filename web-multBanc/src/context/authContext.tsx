@@ -16,7 +16,6 @@ type UserProviderProps = {
 };
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<TUserItens | null>(null);
-  
 
     useEffect(() => {
         const userStorage = localStorage.getItem("user");

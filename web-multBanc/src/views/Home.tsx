@@ -54,7 +54,7 @@ export default function Home() {
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 text-white font-semibold text-2xl">
+                    <div className="flex-shrink-0 text-black font-semibold text-2xl">
                       <a href="/home">MultBanc</a>
                     </div>
                     <div className="hidden md:block">
@@ -66,8 +66,8 @@ export default function Home() {
                             onClick={() => item.name === "home" ? navigate("/") : navigate(item.href)}
                             className={classNames(
                               item.current
-                                ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                ? 'text-black hover:bg-gray-500 hover:text-white'
+                                : 'text-black hover:bg-gray-500 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )}
                             aria-current={item.current ? 'page' : undefined}
@@ -83,7 +83,7 @@ export default function Home() {
                     <div className="ml-4 flex items-center md:ml-6">
                       <button
                         type="button"
-                        className="relative rounded-full bg-primary p-1 text-gray-400 hover:text-white focus:outline-none"
+                        className="relative rounded-full bg-primary p-1 text-black hover:text-white focus:outline-none"
                         onClick={() => logout()}
                       >
                         <span className="absolute -inset-1.5" />
@@ -133,7 +133,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
-                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-primary p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-primary p-2 text-black hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
                       {open ? (
@@ -200,8 +200,8 @@ export default function Home() {
         </Disclosure>
         <header className="shadow-xl bg-white border">
           <div className="grid grid-cols-2 gap-5 items-start mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="bg-primary text-2xl rounded-xl px-3 py-3 font-bold tracking-tigh text-white">Saldo : R${account ? account?.balance.toFixed(2) : "0,00"}</h1>                        
-            <h1 className="bg-primary text-2xl rounded-xl px-3 py-3 font-bold tracking-tight text-white">Rendimento : {account ? account?.performace.toFixed(1) : "0,0"}%</h1>
+            <h1 className="bg-black text-2xl rounded-xl px-3 py-3 font-bold tracking-tigh text-white">Saldo : R${account ? account?.balance.toFixed(2) : "0,00"}</h1>                        
+            <h1 className="bg-black text-2xl rounded-xl px-3 py-3 font-bold tracking-tight text-white">Rendimento : {account ? account?.performace.toFixed(1) : "0,0"}%</h1>
           </div>
         </header>
         <main>
