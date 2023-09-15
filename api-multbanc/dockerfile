@@ -1,0 +1,12 @@
+FROM openjdk:17-jdk-slim
+
+ENV DB_URL jdbc:mysql://localhost/dbfinanceiro?createDatabaseIfNotExist=true&serverTimezone=UTC
+
+ENV DB_USER root
+
+ENV DB_PASSWORD root
+
+COPY target/api-multbanc.jar .
+
+
+CMD ["java", "-jar", "api-multbanc.jar"]

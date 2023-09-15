@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/dbfinanceiro?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  servlet:
+    context-path: /auth
+
+cors:
+  origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
