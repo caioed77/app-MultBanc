@@ -4,8 +4,10 @@ package com.multBancapp.apimultbanc.services;
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
+import com.multBancapp.apimultbanc.exceptions.ResourceAlreadyExistsException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
+import com.multBancapp.apimultbanc.repositories.Querys.QAccountDsl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +23,16 @@ public class AccountService {
 
       private final TypeAccountService typeAccountService;
 
+      private final QAccountDsl accountDsl;
+
       private final TransferService transferService;
 
-      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService, TransferService transferService){
+      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService, TransferService transferService, QAccountDsl accountDsl){
             this.userService = userService;
             this.accountRepository = accountRepository;
             this.typeAccountService = typeAccountService;
             this.transferService = transferService;
+            this.accountDsl = accountDsl;
       }
 
       @Transactional
@@ -37,6 +42,10 @@ public class AccountService {
 
             var typeAcc =  typeAccountService.findByTypeAccount(account.typeAccount())
                     .orElseThrow(() -> new ResouceNotFoundException(account.typeAccount()));
+
+            if (accountDsl.findExistAccount(account.number()) != null) {
+                  throw new BusinessRulesException("Essa conta ja foi cadastrada");
+            }
 
             var resultEntity = AccountEntity.builder()
                     .number(account.number())
