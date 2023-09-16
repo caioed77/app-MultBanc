@@ -3,6 +3,7 @@ package com.multBancapp.apimultbanc.services;
 import com.multBancapp.apimultbanc.entities.TransferEntity;
 import com.multBancapp.apimultbanc.entities.UserEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
+import com.multBancapp.apimultbanc.exceptions.ResourceAlreadyExistsException;
 import com.multBancapp.apimultbanc.models.dto.TransferDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.TransferRepository;
@@ -79,7 +80,7 @@ public class TransferService {
         if (transferEntity.getStatus().equalsIgnoreCase("Concluido")) {
             transferRepository.delete(transferEntity);
         } else {
-            throw new BusinessRulesException("Esta conta possui transações pendentes. Por favor, verifique.");
+            throw new ResourceAlreadyExistsException("Esta conta possui transações pendentes. Por favor, verifique.");
         }
     }
 
