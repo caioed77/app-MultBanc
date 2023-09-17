@@ -12,23 +12,23 @@ export default function MyAccount() {
   const [rendimento, setRendimento] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const { user } = useUser();
- 
+
   function closeModal() {
     setOpenModal(false)
   }
 
   async function handleCreateAccount() {
     try {
-      const response = await api.post('conta/cadastrar', {                      
+      const response = await api.post('conta/cadastrar', {
         agency: agencia,
         number: numConta,
         holder: user?.user,
         typeAccount: tipoConta,
         balance: saldo,
-        performace: rendimento            
+        performace: rendimento
       });
 
-      if (response.status === 201) {        
+      if (response.status === 201) {
         setOpenModal(true)
       } else {
         alert('Conta cadastrar com sucesso')
@@ -59,7 +59,6 @@ export default function MyAccount() {
               />
             </div>
           </div>
-
           <div className="sm:col-span-3">
             <label htmlFor="last-name" className="block text-md font-medium leading-6 text-white">
               Agência
@@ -70,13 +69,12 @@ export default function MyAccount() {
                 name="last-name"
                 id="last-name"
                 autoComplete="family-name"
-                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 px-3 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm focus:outline-none sm:text-sm sm:leading-6"
                 value={agencia}
                 onChange={(e) => setAgencia(e.target.valueAsNumber)}
               />
             </div>
           </div>
-
           <div className="sm:col-span-3">
             <label htmlFor="country" className="block text-md font-medium leading-6 text-white">
               Tipo da conta
@@ -86,7 +84,7 @@ export default function MyAccount() {
                 id="country"
                 name="country"
                 autoComplete="country-name"
-                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-md ring-1 ring-inset ring-gray-300 focus:outline-none sm:max-w-xs sm:text-sm sm:leading-6"
+                className="h-full rounded-md border-0 py-2 px-3 pr-7 focus:outline-none sm:text-sm"
                 value={tipoConta}
                 onChange={(e) => setTipoConta(e.currentTarget.value)}
               >
@@ -102,10 +100,11 @@ export default function MyAccount() {
             <div className="mt-2">
               <input
                 type="number"
-                name="region"
-                id="region"
+                name="price"
+                id="price"
+                placeholder="0.00"
                 autoComplete="address-level1"
-                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:outline-none sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm focus:outline-none sm:text-sm sm:leading-6"
                 value={saldo}
                 onChange={(e) => setSaldo(e.target.valueAsNumber)}
               />
@@ -121,7 +120,7 @@ export default function MyAccount() {
                 name="postal-code"
                 id="postal-code"
                 autoComplete="postal-code"
-                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 px-3 shadow-sm focus:outline-none sm:text-sm sm:leading-6"
                 value={rendimento}
                 onChange={(e) => setRendimento(e.target.valueAsNumber)}
               />
@@ -137,7 +136,7 @@ export default function MyAccount() {
           Cadastrar
         </button>
         {openModal && <ResultModal onClose={closeModal} mensagem="Conta cadastrada com sucesso" />}
-      </div>      
+      </div>
     </form>
   );
 }

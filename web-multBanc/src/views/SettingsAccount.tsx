@@ -49,7 +49,7 @@ export default function SettingsAccount() {
         <div className="flex flex-col">
           <label className="text-lg text-white mb-2">Tipo de Pessoa:</label>
           <select
-            className="border border-purple-500 font-roboto rounded-lg px-3 py-2 focus:outline-none"
+            className="border-0 font-roboto rounded-lg px-3 py-2 focus:outline-none"
             value={tipoPessoa}
             onChange={(e) => setTipoPessoa(e.currentTarget.value)}
           >
@@ -60,7 +60,7 @@ export default function SettingsAccount() {
         <div className="flex flex-col">
           <label className="text-lg text-white mb-2">Documento</label>
           <input
-            className="border border-purple-500 font-roboto rounded-lg px-3 py-2 focus:outline-none"
+            className="border-0 font-roboto rounded-lg px-3 py-2 focus:outline-none"
             type="text"
             placeholder="CPF/CNPJ"
             value={documento}
@@ -70,7 +70,7 @@ export default function SettingsAccount() {
         <div className="flex flex-col">
           <label className="text-lg text-white mb-2">Foto</label>
           <input
-            className="border border-purple-500 font-roboto rounded-lg px-3 py-2 focus:outline-none"
+            className="border-0 font-roboto rounded-lg px-3 py-2 focus:outline-none"
             type="text"
             placeholder="URL Imagem"
             value={foto}
