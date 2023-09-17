@@ -1,16 +1,26 @@
 package com.multBancapp.apimultbanc.services;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
-import com.multBancapp.apimultbanc.exceptions.ResourceAlreadyExistsException;
 import com.multBancapp.apimultbanc.models.dto.AccountDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.Querys.QAccountDsl;
+import com.multBancapp.apimultbanc.services.Utils.ExchangeRateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+
+
+import java.net.URI;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -27,12 +37,16 @@ public class AccountService {
 
       private final TransferService transferService;
 
-      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService, TransferService transferService, QAccountDsl accountDsl){
+      private final ExchangeRateUtil exchangeRate;
+
+      public AccountService(UserService userService, AccountRepository accountRepository, TypeAccountService typeAccountService,
+                            TransferService transferService, QAccountDsl accountDsl, ExchangeRateUtil exchangeRate){
             this.userService = userService;
             this.accountRepository = accountRepository;
             this.typeAccountService = typeAccountService;
             this.transferService = transferService;
             this.accountDsl = accountDsl;
+            this.exchangeRate = exchangeRate;
       }
 
       @Transactional
@@ -54,7 +68,7 @@ public class AccountService {
                     .typeAccount(typeAcc)
                     .balance(account.balance())
                     .performace(account.performace())
-                    .rate(account.rate())
+                    .rate(exchangeRate.returnValueRate())
                     .build();
 
             accountRepository.save(resultEntity);
@@ -75,12 +89,13 @@ public class AccountService {
 
       @Transactional
       public void withdrawAccount(BigDecimal amount, Integer numberAccount, Double rate) {
+
             var accountResult = Optional.ofNullable(accountRepository.findByNumberAccount(numberAccount))
                     .orElseThrow(() -> new BusinessRulesException("Conta não encontrada."));
 
                   if (amount.compareTo(BigDecimal.ZERO) > 0) {
                         switch (accountResult.getTypeAccount().getId()) {
-                              case "C"  -> accountResult.toWithdraw(amount.subtract(BigDecimal.valueOf(rate)));
+                              case "C"  -> accountResult.toWithdraw(amount.add(exchangeRate.returnValueRate()));
                               case "P"  -> accountResult.toWithdraw(amount);
                         }
                   } else {
@@ -113,4 +128,5 @@ public class AccountService {
             transferService.deleteTransfer(transferEntity.getId());
             accountRepository.delete(accountEntity);
       }
+
 }

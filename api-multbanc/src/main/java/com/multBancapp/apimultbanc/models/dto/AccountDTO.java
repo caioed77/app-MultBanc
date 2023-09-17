@@ -7,6 +7,6 @@ import com.multBancapp.apimultbanc.repositories.UserRepository;
 
 import java.math.BigDecimal;
 
-public record AccountDTO(Integer number, Integer agency, Long holder, String typeAccount, BigDecimal balance, BigDecimal performace, Double rate) {
+public record AccountDTO(Integer number, Integer agency, Long holder, String typeAccount, BigDecimal balance, BigDecimal performace, BigDecimal rate) {
 
 }
