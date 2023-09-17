@@ -22,3 +22,7 @@ server:
 
 cors:
   origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+
+ExApiKey: f6248162edmsh4b9da515ab15a7fp181fdcjsn2692a8713e53
+ExApiUrl: https://exchangerate-api.p.rapidapi.com/rapid/latest/USD
+ExApiHost: exchangerate-api.p.rapidapi.com

@@ -38,7 +38,7 @@ public class AccountEntity {
 
       private  BigDecimal performace;
 
-      private Double rate;
+      private BigDecimal rate;
 
 
       public void deposit(BigDecimal value) {
