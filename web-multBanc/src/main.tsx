@@ -7,9 +7,10 @@ import Home from './views/Home';
 import Register from './views/Register';
 import MyAccount from './views/MyAccount';
 import '@radix-ui/themes/styles.css';
-import CashMachine from './views/CashMachine';
+import LootScreen from './views/LootScreen';
 import { UserProvider } from './context/authContext';
 import SettingsAccount from './views/SettingsAccount';
+import DepositScreen from './views/DepositScreen';
 
 const router = createBrowserRouter([
   {
@@ -29,13 +30,17 @@ const router = createBrowserRouter([
         element: <MyAccount />,
       },
       {
-        path: "saqueDeposito",
-        element: <CashMachine />,
-      },
+        path: "saque",
+        element: <LootScreen />,
+      },     
       {
         path: "configuracaoAccount",
         element: <SettingsAccount />,
       },
+      {
+        path: "deposito",
+        element: <DepositScreen />
+      }
     ],
   },
 ]);
