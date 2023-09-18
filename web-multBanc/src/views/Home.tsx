@@ -17,12 +17,7 @@ export default function Home() {
       })
       .catch((error) => {
         console.error("Erro na chamada da API:", error);
-      });
-
-      api.get(``).then(() => {
-      
-      
-      }); 
+      });     
   }, [user.user]);
 
   return (

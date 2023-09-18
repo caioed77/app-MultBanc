@@ -88,7 +88,7 @@ public class AccountService {
       }
 
       @Transactional
-      public void withdrawAccount(BigDecimal amount, Integer numberAccount, Double rate) {
+      public void withdrawAccount(BigDecimal amount, Integer numberAccount) {
 
             var accountResult = Optional.ofNullable(accountRepository.findByNumberAccount(numberAccount))
                     .orElseThrow(() -> new BusinessRulesException("Conta não encontrada."));
