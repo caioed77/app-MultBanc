@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { api } from "../service/api";
@@ -17,16 +18,17 @@ export default function Login() {
     setOpenModal(false)
   }
 
-  async function validateLogin() {
+  function validateLogin() {
     try {
-      const response = await api.get(`/login/autenticar?email=${user}&senha=${password}`);
+      api.get(`/login/autenticar?email=${user}&senha=${password}`)
+        .then((response) => {
 
-      if (response.status === 202) {
-        loginUser(response.data)
-        localStorage.setItem("user", JSON.stringify(response.data));
-        navigate("/home")
-      }
-
+          if (response.status === 202) {
+            loginUser(response.data)
+            localStorage.setItem("user", JSON.stringify(response.data));
+            navigate("/home")
+          }      
+        });
 
     } catch (error) {
       setOpenModal(true);
