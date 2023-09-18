@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { useUser } from "../context/authContext";
 import { TAccount } from '../@Types/Account';
 import { api } from '../service/api';
+import { ResultModal } from '../components/Dialogs/resultModal';
 
 export default function DepositScreen() {
+  
   const user = useUser();
   const [account, setAccount] = useState<TAccount | undefined>(undefined);
   const [deposit, setDeposit] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     api.get(`/conta/${user.user?.user}/buscarConta`)
@@ -16,7 +19,23 @@ export default function DepositScreen() {
       .catch((error) => {
         console.error("Erro na chamada da API:", error);
       });
-  }, [account, user.user?.user]);
+  }, [account, deposit, user.user?.user]);
+
+
+  async function handleDeposit() {
+    const response = await api.put(`/conta/deposito?valorDeposito=${deposit}&numeroConta=${account?.number}`);
+    try {
+      if (response.status === 200) {
+        setOpenModal(true);
+      }      
+    } catch (error) {
+      console.error("Erro ao realizar o deposito:", error);
+    }
+  }
+
+  function closeModal() {
+    setOpenModal(false)
+  }
 
   return (
     <div className="bg-primary p-7 rounded-md text-white flex flex-col">
@@ -32,19 +51,21 @@ export default function DepositScreen() {
             <span className="text-gray-500 sm:text-sm">$</span>
           </div>
           <input
-            type="text"
+            type="number"
             name="price"
             id="price"
             className="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 focus:outline-none sm:text-sm sm:leading-5"
             placeholder="0.00"
             value={deposit}
             onChange={(e) => setDeposit(e.target.valueAsNumber)}
+            required
           />
         </div>
       </div>
       <div className="inline-flex justify-end items-end mt-10">
-        <button className="bg-button hover:bg-zinc-500 text-white font-semibold px-6 py-2 rounded">Depositar</button>
+        <button type="submit" onClick={handleDeposit} className="bg-button hover:bg-zinc-500 text-white font-semibold px-6 py-2 rounded">Depositar</button>
       </div>
+      {openModal && <ResultModal onClose={closeModal} mensagem="Deposito realizado com sucesso" />}
     </div>
   )
 }

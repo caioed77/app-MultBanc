@@ -10,6 +10,7 @@ export default function LootScreen() {
   const [withdraw, setWithdraw] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [account, setAccount] = useState<TAccount | undefined>(undefined);
+
   useEffect(() => {
     api.get(`/conta/${user.user?.user}/buscarConta`)
       .then((response) => {
@@ -18,7 +19,7 @@ export default function LootScreen() {
       .catch((error) => {
         console.error("Erro na chamada da API:", error);
       });
-  }, [account, user.user?.user]);
+  }, [account, withdraw, user.user?.user]);
 
   function closeModal() {
     setOpenModal(false)
@@ -59,6 +60,7 @@ export default function LootScreen() {
               placeholder="0.00"
               value={withdraw}
               onChange={(e) => setWithdraw(e.target.valueAsNumber)}
+              required 
             />
           </div>
         </div>
