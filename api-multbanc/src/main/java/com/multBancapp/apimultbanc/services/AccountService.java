@@ -1,8 +1,6 @@
 package com.multBancapp.apimultbanc.services;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.exceptions.BusinessRulesException;
 import com.multBancapp.apimultbanc.exceptions.ResouceNotFoundException;
@@ -12,15 +10,8 @@ import com.multBancapp.apimultbanc.repositories.Querys.QAccountDsl;
 import com.multBancapp.apimultbanc.services.Utils.ExchangeRateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 
 
-import java.net.URI;
 import java.math.BigDecimal;
 import java.util.Optional;
 

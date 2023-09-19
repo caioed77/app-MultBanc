@@ -20,7 +20,7 @@ public class TranferController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity transferAccount(@RequestBody TransferDTO transfer) {
+    public ResponseEntity<Void> transferAccount(@RequestBody TransferDTO transfer) {
         transferService.generatedTransfer(transfer);
         return ResponseEntity.ok().build();
     }

@@ -7,17 +7,12 @@ import com.multBancapp.apimultbanc.exceptions.ResourceAlreadyExistsException;
 import com.multBancapp.apimultbanc.models.dto.TransferDTO;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
 import com.multBancapp.apimultbanc.repositories.TransferRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Service
 public class TransferService {

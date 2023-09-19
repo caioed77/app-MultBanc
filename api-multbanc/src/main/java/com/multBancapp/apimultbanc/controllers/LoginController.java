@@ -29,7 +29,7 @@ public class LoginController {
 
       @PostMapping(value = "/novoUsuario")
       @ResponseStatus(HttpStatus.CREATED)
-      public ResponseEntity registerLogin(@RequestBody UserDTO userDTO) {
+      public ResponseEntity<Void> registerLogin(@RequestBody UserDTO userDTO) {
             userService.registerLogin(userDTO);
             return  ResponseEntity.ok().build();
       }
