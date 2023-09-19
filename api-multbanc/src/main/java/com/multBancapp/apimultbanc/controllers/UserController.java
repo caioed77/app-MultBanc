@@ -31,7 +31,7 @@ public class UserController {
 
       @PatchMapping(value = "/atualizar/{id}")
       @ResponseStatus(HttpStatus.ACCEPTED)
-      public ResponseEntity updateUser(
+      public ResponseEntity<Void> updateUser(
               @PathVariable Long id,
               @RequestBody UpdateUserDTO updatedUser) {
             userService.changeUser(id, updatedUser);

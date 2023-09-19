@@ -1,6 +1,5 @@
 package com.multBancapp.apimultbanc.services;
 
-import com.multBancapp.apimultbanc.entities.AccountEntity;
 import com.multBancapp.apimultbanc.models.dto.ListTransferQuantitiesDTO;
 import com.multBancapp.apimultbanc.models.projections.ListTransferQuantitiesProjection;
 import com.multBancapp.apimultbanc.repositories.AccountRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,27 +36,28 @@ public class GeneratedXLSService {
             ));
         }
 
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Dados Financeiros");
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Dados Financeiros");
 
-        int rowNum = 0;
+            int rowNum = 0;
 
-        for (ListTransferQuantitiesDTO data : dataResult) {
-            Row row = sheet.createRow(rowNum++);
-            int cellNum = 0;
+            for (ListTransferQuantitiesDTO data : dataResult) {
+                Row row = sheet.createRow(rowNum++);
+                int cellNum = 0;
 
-            Integer numberAccount = data.numberAccount();
-            row.createCell(cellNum++).setCellValue(Objects.requireNonNullElse(numberAccount, 0));
+                Integer numberAccount = data.numberAccount();
+                row.createCell(cellNum++).setCellValue(Objects.requireNonNullElse(numberAccount, 0));
 
-            row.createCell(cellNum++).setCellValue(data.nameHolder());
-            row.createCell(cellNum).setCellValue(data.value().doubleValue());
+                row.createCell(cellNum++).setCellValue(data.nameHolder());
+                row.createCell(cellNum).setCellValue(data.value().doubleValue());
+            }
+
+              try (FileOutputStream fileOut = new FileOutputStream("C:\\Users\\H1xz\\Documents\\finance.xlsx")) {
+                    workbook.write(fileOut);
+                    return "Arquivo Excel gerado com sucesso!";
+              } catch (IOException e) {
+                    return "Erro ao gerar o arquivo Excel: " + e.getMessage();
+              }
         }
-
-          try (FileOutputStream fileOut = new FileOutputStream("C:\\Users\\H1xz\\Documents\\finance.xlsx")) {
-                workbook.write(fileOut);
-                return "Arquivo Excel gerado com sucesso!";
-          } catch (IOException e) {
-                return "Erro ao gerar o arquivo Excel: " + e.getMessage();
-          }
     }
 }
