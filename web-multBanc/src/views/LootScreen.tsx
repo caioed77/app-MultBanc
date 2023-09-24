@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useUser } from "../context/authContext";
 import { TAccount } from '../@Types/Account';
 import { api } from '../service/api';
-import { ResultModal } from '../components/Dialogs/resultModal';
+import { ResultModal } from '../components/Modals/resultModal';
 
 export default function LootScreen() {
 
