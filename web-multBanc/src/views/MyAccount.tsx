@@ -1,10 +1,10 @@
-import { ResultModal } from "../components/Dialogs/resultModal";
 import { useUser } from "../context/authContext";
-import { api } from "../service/api";
 import { useState } from "react";
+import { handleCreateAccount } from "../service/AccountService";
+import { IAccount } from "../@Types/Account";
+import { ResultModal } from "../components/Modals/resultModal";
 
 export default function MyAccount() {
-
   const [numConta, setNumConta] = useState(0);
   const [agencia, setAgencia] = useState(0);
   const [tipoConta, setTipoConta] = useState('');
@@ -13,31 +13,26 @@ export default function MyAccount() {
   const [openModal, setOpenModal] = useState(false);
   const { user } = useUser();
 
+  async function createAccount() { 
+    const dados: IAccount = {
+      agency: agencia,
+      number: numConta,
+      holder: user?.user,
+      typeAccount: tipoConta,
+      balance: saldo,
+      performace: rendimento,
+    }
+    
+    const result = await handleCreateAccount(dados)
+    if (result) {
+      setOpenModal(true)
+    }
+  }
+
   function closeModal() {
     setOpenModal(false)
   }
-
-  async function handleCreateAccount() {
-    try {
-      const response = await api.post('conta/cadastrar', {
-        agency: agencia,
-        number: numConta,
-        holder: user?.user,
-        typeAccount: tipoConta,
-        balance: saldo,
-        performace: rendimento
-      });
-
-      if (response.status === 201) {
-        setOpenModal(true)
-      } else {
-        alert('Conta cadastrar com sucesso')
-      }
-
-    } catch (error) {
-      console.error('Erro ao cadastrada os dados:', error);
-    }
-  }
+  
   return (
     <form className="bg-primary rounded-lg shadow-lg p-10 relative">
       <div className="border-b border-gray-900/10 pb-6 w-[450px]">
@@ -131,7 +126,7 @@ export default function MyAccount() {
       <div className="flex gap-5 absolute bottom-4 right-4">
         <button
           className="bg-button hover:bg-zinc-500 text-white font-semibold px-6 py-2 rounded"
-          onClick={handleCreateAccount}
+          onClick={createAccount}
         >
           Cadastrar
         </button>

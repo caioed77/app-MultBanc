@@ -1,11 +1,10 @@
-export interface TAccount {
-    number: number;
+export interface IAccount {
     agency: number;
-    holder: number;
+    number: number;
+    holder: number | undefined;
     typeAccount: string;
     balance: number;
     performace: number;
-    rate: number;
-}
-
+  }
+  
 

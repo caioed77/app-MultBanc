@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { api } from "../service/api";
-import { ResultModalErro } from "../components/Dialogs/resultModalErro";
+import { ResultModalErro } from "../components/Modals/resultModalErro";
 import { useUser } from "../context/authContext";
 import { Bank } from "@phosphor-icons/react";
 export default function Login() {

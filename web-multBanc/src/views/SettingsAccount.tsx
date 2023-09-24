@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { api } from "../service/api";
 import { useUser } from "../context/authContext";
-import { ResultModalErro } from "../components/Dialogs/resultModalErro";
-import { ResultModal } from "../components/Dialogs/resultModal";
+import { ResultModalErro } from "../components/Modals/resultModalErro";
+import { ResultModal } from "../components/Modals/resultModal";
 
 export default function SettingsAccount() {
 
@@ -14,8 +14,7 @@ export default function SettingsAccount() {
   const { user } = useUser();
 
   async function handleUpdateAccount() {
-
-
+    
     try {
       const response = await api.patch('usuarios/atualizar/' + user?.user, {
         document: documento,
