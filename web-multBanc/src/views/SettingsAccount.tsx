@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { api } from "../service/api";
 import { useUser } from "../context/authContext";
-import { ResultModalErro } from "../components/Modals/resultModalErro";
 import { ResultModal } from "../components/Modals/resultModal";
 
 export default function SettingsAccount() {
@@ -9,7 +8,6 @@ export default function SettingsAccount() {
   const [documento, setDocumento] = useState('');
   const [tipoPessoa, setTipoPessoa] = useState('');
   const [foto, setFoto] = useState('');
-  const [openModalErr, setOpenModalErr] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { user } = useUser();
 
@@ -26,15 +24,9 @@ export default function SettingsAccount() {
         setOpenModal(true);
       }
 
-    } catch (error) {
-      setOpenModalErr(true);
+    } catch (error) {    
       alert('Erro ao atualizar os dados');
     }
-  }
-
-  function closeModalErr() {
-    setOpenModalErr(false);
-    (false)
   }
 
   function closeModal() {
@@ -83,8 +75,7 @@ export default function SettingsAccount() {
           onClick={handleUpdateAccount}
         >
           Alterar
-        </button>
-        {openModalErr && <ResultModalErro onClose={closeModalErr} mensagem="CPF invalido, verifique!" />}
+        </button>        
         {openModal && <ResultModal onClose={closeModal} mensagem="Alteração realizada com sucesso" />}
       </div>
     </div>

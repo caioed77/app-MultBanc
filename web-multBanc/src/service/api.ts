@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { useErrorContext } from "../context/errorContext";
 
 export const api = axios.create({
   baseURL: "http://localhost:8080/auth",
@@ -8,19 +9,23 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  (config: InternalAxiosRequestConfig) => {  
     return config;
   },
-  (error): unknown => {
+  (error) => {
+    const { addErro } = useErrorContext();
+    addErro(error.message);
     return Promise.reject(error);
   }
 );
 
 api.interceptors.response.use(
-  (config: AxiosResponse<unknown, unknown>) => {
+  (config: AxiosResponse<unknown, unknown>) => {    
     return config;
   },
-  (error): unknown => {
+  (error) => {
+    const { addErro } = useErrorContext();
+    addErro(error.message);
     return Promise.reject(error);
   }
 );
