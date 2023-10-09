@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useUser } from '../context/authContext'
 import { Outlet } from 'react-router-dom'
-import { TAccount } from '../@Types/Account'
+import { IAccount } from '../@Types/Account'
 import { api } from '../service/api'
 import NavBar from '../components/NavBar'
 
 export default function Home() {
 
   const user = useUser();
-  const [account, setAccount] = useState<TAccount | undefined>(undefined);
+  const [account, setAccount] = useState<IAccount | undefined>(undefined);
 
   useEffect(() => {
     api.get(`/conta/${user.user?.user}/buscarConta`)

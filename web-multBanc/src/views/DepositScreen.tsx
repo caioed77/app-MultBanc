@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useUser } from "../context/authContext";
-import { TAccount } from '../@Types/Account';
 import { api } from '../service/api';
 import { ResultModal } from '../components/Modals/resultModal';
+import { IAccount } from '../@Types/Account';
 
 export default function DepositScreen() {
   
   const user = useUser();
-  const [account, setAccount] = useState<TAccount | undefined>(undefined);
+  const [account, setAccount] = useState<IAccount | undefined>(undefined);
   const [deposit, setDeposit] = useState(0);
   const [openModal, setOpenModal] = useState(false);
 

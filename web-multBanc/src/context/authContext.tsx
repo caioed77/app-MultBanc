@@ -30,7 +30,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   
     function logout() {
-      setUser(null);
+       setUser(null);
     }
   
     return (

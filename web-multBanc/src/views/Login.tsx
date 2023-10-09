@@ -2,21 +2,15 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { api } from "../service/api";
-import { ResultModalErro } from "../components/Modals/resultModalErro";
 import { useUser } from "../context/authContext";
 import { Bank } from "@phosphor-icons/react";
-export default function Login() {
 
-  const [openModal, setOpenModal] = useState(false);
+export default function Login() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const { loginUser } = useUser();
-
-  function closeModal() {
-    setOpenModal(false)
-  }
 
   function validateLogin() {
     try {
@@ -30,8 +24,7 @@ export default function Login() {
           }      
         });
 
-    } catch (error) {
-      setOpenModal(true);
+    } catch (error) {      
       console.error("Erro na requisição", error);
     }
   }
@@ -77,9 +70,7 @@ export default function Login() {
                 Entrar
               </button>
             </div>
-          </div>
-          {openModal && <ResultModalErro onClose={closeModal} mensagem="Usuário ou senha invalido!" />}
-
+          </div>        
           <div className="pt-8 text-base font-semibold leading-7">
             <p className="text-black">Não possui uma conta?</p>
             <p>

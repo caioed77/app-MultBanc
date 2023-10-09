@@ -63,7 +63,6 @@ public class UserService {
                     .orElseThrow(() -> new BusinessRulesException("Usuário não encontrado"));
             var comparePassword = passwordEncoder.passwordEncoder().matches(password, userResult.get().getPassword());
             return comparePassword && !userResult.get().getBlocked().contentEquals("T");
-
       }
 
       @Transactional
