@@ -1,0 +1,11 @@
+pipeline {
+    agent any    
+        
+    stages {
+       stage('Build Image') {
+            script {
+              dockerapp = docker.build("caioed77/api-multbanc", '-f ./Dockerfile ./')
+            }                   
+       }          
+    }
+}
